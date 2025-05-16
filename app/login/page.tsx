@@ -92,13 +92,8 @@ export default function Login() {
 
         // Simular login bem-sucedido
         setLoginSuccess(true)
-
-        // Redirecionar após login bem-sucedido
-        setTimeout(() => {
-          if (typeof window !== "undefined") {
-            window.location.href = "/"
-          }
-        }, 1000)
+        console.log("Login bem-sucedido, mas redirecionamento desativado")
+        // O usuário pode clicar no botão para ir para a dashboard
       } catch (error) {
         console.error("Erro ao enviar formulário:", error)
         setErrors({ form: "E-mail ou senha incorretos. Tente novamente." })
@@ -146,7 +141,9 @@ export default function Login() {
           <div className="bg-green-50 text-green-700 p-4 rounded-xl border border-green-200 text-center">
             <Check className="h-8 w-8 mx-auto mb-2 text-green-500" />
             <p className="font-medium">Login realizado com sucesso!</p>
-            <p className="text-sm mt-1">Redirecionando...</p>
+            <Link href="/" className="text-[#66e0cc] font-semibold hover:underline">
+              Ir para a Dashboard
+            </Link>
           </div>
         ) : (
           <>

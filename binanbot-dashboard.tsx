@@ -21,7 +21,6 @@ import {
   BookOpen,
   BarChart2,
   X,
-  Search,
   ArrowUpRight,
   ArrowDownLeft,
   Filter,
@@ -30,10 +29,9 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import ApertumDashboard from "./components/apertum-dashboard"
 
 // Define TypeScript interfaces for our components
 interface SidebarItemProps {
@@ -50,71 +48,9 @@ interface NotificationItemProps {
   isNew?: boolean
 }
 
-// Define cryptocurrency interface
-interface Cryptocurrency {
-  name: string
-  symbol: string
-  balance: string
-  valueUSD: string
-  deposits: string
-  withdrawals: string
-  active: boolean
-}
-
-// Sample cryptocurrency data
-const cryptocurrencies: Cryptocurrency[] = [
-  {
-    name: "Moeda Airdrop Binanbot",
-    symbol: "BNBC-A",
-    balance: "0,0000",
-    valueUSD: "0.00",
-    deposits: "0,0000",
-    withdrawals: "0,0000",
-    active: false,
-  },
-  {
-    name: "Tether",
-    symbol: "USDT",
-    balance: "111.1309088",
-    valueUSD: "111.13",
-    deposits: "0,0000",
-    withdrawals: "3.117,6600",
-    active: true,
-  },
-  {
-    name: "Bitcoin",
-    symbol: "BTC",
-    balance: "0,00740286",
-    valueUSD: "518.20",
-    deposits: "0,0000",
-    withdrawals: "0,0000",
-    active: true,
-  },
-  {
-    name: "Ethereum",
-    symbol: "ETH",
-    balance: "0,12340000",
-    valueUSD: "372.55",
-    deposits: "0,2500",
-    withdrawals: "0,1266",
-    active: true,
-  },
-  {
-    name: "Binance Coin",
-    symbol: "BNB",
-    balance: "1,50000000",
-    valueUSD: "810.00",
-    deposits: "1,5000",
-    withdrawals: "0,0000",
-    active: true,
-  },
-]
-
 export default function BinanbotDashboard() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
   const [showNotifications, setShowNotifications] = useState(false)
-  const [cryptos, setCryptos] = useState<Cryptocurrency[]>(cryptocurrencies || [])
   const [isClient, setIsClient] = useState(false)
 
   // Verificar se estamos no cliente
@@ -169,12 +105,6 @@ export default function BinanbotDashboard() {
     }
   }, [menuOpen, isClient])
 
-  // Safe search handler
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e || !e.target) return
-    setSearchQuery(e.target.value)
-  }, [])
-
   // Toggle menu safely
   const toggleMenu = useCallback(() => {
     setMenuOpen((prev) => !prev)
@@ -185,22 +115,13 @@ export default function BinanbotDashboard() {
     setShowNotifications((prev) => !prev)
   }, [])
 
-  // Filter cryptocurrencies based on search query
-  const filteredCryptos = cryptos.filter((crypto) => {
-    if (!crypto || !crypto.name || !crypto.symbol || !searchQuery) return true
-    return (
-      crypto.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      crypto.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })
-
   // Se não estiver no cliente, retorne um placeholder
   if (!isClient) {
     return <div className="flex items-center justify-center min-h-screen bg-black text-white">Carregando...</div>
   }
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
+    <div className="flex min-h-screen bg-black text-white w-full overflow-x-hidden">
       {/* Backdrop overlay when sidebar is open */}
       {menuOpen && (
         <div
@@ -268,11 +189,17 @@ export default function BinanbotDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex justify-between items-center px-4 py-3 bg-[#111] shadow">
+        <header className="sticky top-0 z-30 flex justify-between items-center px-4 py-3 bg-[#111] shadow w-full">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="text-white sidebar-trigger" onClick={toggleMenu}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white sidebar-trigger"
+              onClick={toggleMenu}
+              aria-label="Menu"
+            >
               <Menu size={24} />
             </Button>
             <div className="h-[45px] w-auto relative mb-2">
@@ -309,7 +236,13 @@ export default function BinanbotDashboard() {
 
           <div className="flex items-center gap-3 text-gray-300">
             <div className="relative">
-              <Button variant="ghost" size="icon" className="relative" onClick={toggleNotifications}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={toggleNotifications}
+                aria-label="Notificações"
+              >
                 <Bell size={18} />
                 <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center bg-[#66e0cc] text-[10px] text-black">
                   3
@@ -317,7 +250,7 @@ export default function BinanbotDashboard() {
               </Button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-[#111] border border-gray-800 rounded-md shadow-lg p-2 z-50">
+                <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-[#111] border border-gray-800 rounded-md shadow-lg p-2 z-50">
                   <div className="flex justify-between items-center mb-2 p-2">
                     <h3 className="font-medium">Notificações</h3>
                     <Button variant="ghost" size="sm" onClick={() => setShowNotifications(false)}>
@@ -361,7 +294,7 @@ export default function BinanbotDashboard() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Perfil">
                   <User size={18} />
                 </Button>
               </DropdownMenuTrigger>
@@ -384,32 +317,32 @@ export default function BinanbotDashboard() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+            <Button variant="ghost" size="icon" className="hidden md:flex" aria-label="Tema">
               <Moon size={18} />
             </Button>
 
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+            <Button variant="ghost" size="icon" className="hidden md:flex" aria-label="Idioma">
               <Globe size={18} />
             </Button>
 
-            <Button variant="ghost" size="icon" className="text-red-500 hidden md:flex">
+            <Button variant="ghost" size="icon" className="text-red-500 hidden md:flex" aria-label="Sair">
               <LogOut size={18} />
             </Button>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="flex-1">
+        <main className="flex-1 w-full max-w-full overflow-x-hidden">
           {/* Visão Geral da Carteira */}
-          <div className="px-4 py-6">
-            <div className="flex justify-between items-center mb-4">
+          <div className="px-4 py-6 w-full">
+            <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
               <h2 className="text-lg font-semibold">Visão geral da carteira</h2>
               <Button variant="outline" size="sm" className="text-gray-300 border-gray-700">
                 <Filter size={14} className="mr-2" /> Filtrar
               </Button>
             </div>
 
-            <div className="bg-[#111] p-5 rounded-xl flex flex-col gap-6 md:flex-row md:justify-between">
+            <div className="bg-[#111] p-5 rounded-xl flex flex-col gap-6 md:flex-row md:justify-between w-full">
               <div>
                 <div className="text-sm text-gray-400">Saldo total</div>
                 <div className="text-2xl font-bold mt-1">≈$ 2.811,88</div>
@@ -449,191 +382,9 @@ export default function BinanbotDashboard() {
             </div>
           </div>
 
-          {/* Carteira Spot */}
-          <div className="bg-white text-black rounded-t-3xl p-4 md:p-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <div>
-                <h3 className="font-semibold text-lg">Carteira Spot</h3>
-                <p className="text-sm text-gray-500">Gerencie seus ativos digitais</p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                <div className="relative w-full sm:w-64">
-                  <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <Input
-                    placeholder="Buscar por nome ou símbolo"
-                    className="pl-9 bg-gray-100 border-gray-200"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                  />
-                </div>
-
-                <Link href="/deposito">
-                  <Button className="bg-[#66e0cc] hover:bg-[#50c4b0] text-black">Novo Depósito</Button>
-                </Link>
-              </div>
-            </div>
-
-            <Tabs defaultValue="all" className="mb-6">
-              <TabsList className="bg-gray-100">
-                <TabsTrigger value="all">Todos</TabsTrigger>
-                <TabsTrigger value="favorites">Favoritos</TabsTrigger>
-                <TabsTrigger value="stablecoins">Stablecoins</TabsTrigger>
-                <TabsTrigger value="tokens">Tokens</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            {/* Mobile View */}
-            <div className="md:hidden space-y-4">
-              {filteredCryptos && filteredCryptos.length > 0 ? (
-                filteredCryptos.map((crypto, index) => (
-                  <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <div className="font-medium">{crypto?.name || "Nome desconhecido"}</div>
-                        <div className="text-xs text-gray-500">{crypto?.symbol || "???"}</div>
-                      </div>
-                      <Badge
-                        variant={crypto?.active ? "default" : "secondary"}
-                        className={crypto?.active ? "bg-[#66e0cc] text-black" : "bg-gray-200 text-gray-600"}
-                      >
-                        {crypto?.active ? "Ativo" : "Inativo"}
-                      </Badge>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-                      <div>
-                        <div className="text-gray-500">Saldo</div>
-                        <div className="font-medium">{crypto?.balance || "0"}</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-500">Valor (USD)</div>
-                        <div className="font-medium">${crypto?.valueUSD || "0.00"}</div>
-                      </div>
-                      <div>
-                        <div className="text-gray-500">Depósitos</div>
-                        <div className="text-[#66e0cc]">
-                          {crypto?.deposits || "0"} {crypto?.symbol || ""}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-gray-500">Retiradas</div>
-                        <div className="text-red-600">
-                          {crypto?.withdrawals || "0"} {crypto?.symbol || ""}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Link href="/deposito" className="flex-1">
-                        <Button
-                          size="sm"
-                          className={`w-full ${
-                            crypto?.active ? "bg-[#66e0cc] hover:bg-[#50c4b0] text-black" : "bg-gray-200 text-gray-500"
-                          }`}
-                          disabled={!crypto?.active}
-                        >
-                          Depósito
-                        </Button>
-                      </Link>
-                      <Button
-                        size="sm"
-                        className={`flex-1 ${
-                          crypto?.active ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-200 text-gray-500"
-                        }`}
-                        disabled={!crypto?.active}
-                      >
-                        Retirar
-                      </Button>
-                      <Button size="sm" className="flex-1 bg-blue-500 hover:bg-blue-600">
-                        História
-                      </Button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-10 text-gray-500">
-                  <div className="mb-2">Nenhum resultado encontrado</div>
-                  <div className="text-sm">Tente uma pesquisa diferente</div>
-                </div>
-              )}
-            </div>
-
-            {/* Desktop View */}
-            <div className="overflow-x-auto hidden md:block">
-              {filteredCryptos && filteredCryptos.length > 0 ? (
-                <table className="w-full text-sm">
-                  <thead className="text-left text-gray-500 border-b">
-                    <tr>
-                      <th className="py-3 pl-4">Nome</th>
-                      <th className="py-3">Símbolo</th>
-                      <th className="py-3">Saldo</th>
-                      <th className="py-3">Valor (USD)</th>
-                      <th className="py-3">Depósitos</th>
-                      <th className="py-3">Retiradas</th>
-                      <th className="py-3">Status</th>
-                      <th className="py-3 pr-4">Ação</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-gray-700">
-                    {filteredCryptos.map((crypto, index) => (
-                      <tr key={index} className="border-b hover:bg-gray-50">
-                        <td className="py-4 pl-4">{crypto?.name || "Nome desconhecido"}</td>
-                        <td className="py-4">{crypto?.symbol || "???"}</td>
-                        <td className="py-4">{crypto?.balance || "0"}</td>
-                        <td className="py-4">${crypto?.valueUSD || "0.00"}</td>
-                        <td className="py-4 text-[#66e0cc]">
-                          {crypto?.deposits || "0"} {crypto?.symbol || ""}
-                        </td>
-                        <td className="py-4 text-red-600">
-                          {crypto?.withdrawals || "0"} {crypto?.symbol || ""}
-                        </td>
-                        <td className="py-4">
-                          <Badge
-                            variant={crypto?.active ? "default" : "secondary"}
-                            className={crypto?.active ? "bg-[#66e0cc] text-black" : "bg-gray-200 text-gray-600"}
-                          >
-                            {crypto?.active ? "Ativo" : "Inativo"}
-                          </Badge>
-                        </td>
-                        <td className="py-4 pr-4 space-x-2">
-                          <Link href="/deposito">
-                            <Button
-                              size="sm"
-                              className={
-                                crypto?.active
-                                  ? "bg-[#66e0cc] hover:bg-[#50c4b0] text-black"
-                                  : "bg-gray-200 text-gray-500"
-                              }
-                              disabled={!crypto?.active}
-                            >
-                              Depósito
-                            </Button>
-                          </Link>
-                          <Button
-                            size="sm"
-                            className={
-                              crypto?.active ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-200 text-gray-500"
-                            }
-                            disabled={!crypto?.active}
-                          >
-                            Retirar
-                          </Button>
-                          <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
-                            História
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="text-center py-10 text-gray-500">
-                  <div className="mb-2">Nenhum resultado encontrado</div>
-                  <div className="text-sm">Tente uma pesquisa diferente</div>
-                </div>
-              )}
-            </div>
+          {/* Espaço onde estava a seção "Carteira Spot" - agora com o ApertumDashboard */}
+          <div className="px-4 pb-6 w-full">
+            <ApertumDashboard />
           </div>
         </main>
       </div>
