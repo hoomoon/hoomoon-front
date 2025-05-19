@@ -45,7 +45,7 @@ export default function ApertumHorizontalTicker() {
     .map((_, index) => (
       <div key={index} className="flex items-center space-x-3 px-4">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-[#111111] border border-[#66e0cc]/30">
+          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-transparent border border-[#66e0cc]">
             <img
               src="/assets/apertum-logo.png"
               alt="HooMoon"
@@ -67,7 +67,7 @@ export default function ApertumHorizontalTicker() {
     ))
 
   return (
-    <div className="bg-black w-full max-w-full mx-auto overflow-hidden py-3 rounded-lg border border-[#111111]">
+    <div className="bg-transparent border border-[#66e0cc] w-full max-w-full mx-auto overflow-hidden py-3 rounded-lg">
       <div className="relative w-full overflow-hidden">
         <div ref={containerRef} className="inline-flex">
           <div ref={contentRef} className="inline-flex items-center">

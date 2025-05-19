@@ -119,10 +119,10 @@ export default function ApertumDashboard() {
   }
 
   return (
-    <div className="w-full bg-black text-white p-4 sm:p-6 space-y-6 rounded-xl overflow-hidden">
+    <div className="w-full bg-transparent border border-[#66e0cc] text-white p-4 sm:p-6 space-y-6 rounded-xl overflow-hidden">
       {/* Mensagem de erro quando a API falha */}
       {error && (
-        <div className="bg-yellow-500/20 border border-yellow-500 text-yellow-200 p-3 rounded-lg text-sm mb-4">
+        <div className="bg-transparent border border-yellow-500 text-yellow-200 p-3 rounded-lg text-sm mb-4">
           Exibindo dados simulados. A conexão com a API do Apertum Explorer não está disponível no momento.
         </div>
       )}
@@ -144,58 +144,60 @@ export default function ApertumDashboard() {
 
       {/* CARDS DE ESTATÍSTICAS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="bg-[#111111] p-4 rounded-xl">
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
           <div className="text-sm text-gray-300">Total blocks</div>
           {loading ? (
             <div className="h-7 bg-gray-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <div className="text-xl font-bold">{formatNumber(stats?.total_blocks || 0)}</div>
+            <div className="text-xl font-bold text-white">{formatNumber(stats?.total_blocks || 0)}</div>
           )}
         </div>
-        <div className="bg-[#111111] p-4 rounded-xl">
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
           <div className="text-sm text-gray-300">Average block time</div>
           {loading ? (
             <div className="h-7 bg-gray-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <div className="text-xl font-bold">{stats?.average_block_time || 0}s</div>
+            <div className="text-xl font-bold text-white">{stats?.average_block_time || 0}s</div>
           )}
         </div>
-        <div className="bg-[#111111] p-4 rounded-xl">
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
           <div className="text-sm text-gray-300">Total transactions</div>
           {loading ? (
             <div className="h-7 bg-gray-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <div className="text-xl font-bold">{formatNumber(stats?.total_transactions || 0)}</div>
+            <div className="text-xl font-bold text-white">{formatNumber(stats?.total_transactions || 0)}</div>
           )}
         </div>
-        <div className="bg-[#111111] p-4 rounded-xl">
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
           <div className="text-sm text-gray-300">Wallet addresses</div>
           {loading ? (
             <div className="h-7 bg-gray-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <div className="text-xl font-bold">{formatNumber(stats?.total_addresses || 0)}</div>
+            <div className="text-xl font-bold text-white">{formatNumber(stats?.total_addresses || 0)}</div>
           )}
         </div>
-        <div className="bg-[#111111] p-4 rounded-xl">
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
           <div className="text-sm text-gray-300">Gas tracker</div>
           {loading ? (
             <div className="h-7 bg-gray-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <div className="text-xl font-bold">{stats?.gas_price || 0} Gwei</div>
+            <div className="text-xl font-bold text-white">{stats?.gas_price || 0} Gwei</div>
           )}
         </div>
-        <div className="bg-[#111111] p-4 rounded-xl col-span-1 sm:col-span-2 lg:col-span-1">
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl col-span-1 sm:col-span-2 lg:col-span-1">
           <div className="text-sm text-gray-300">Daily transactions</div>
           {loading ? (
             <div className="h-7 bg-gray-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <div className="text-xl font-bold">{((stats?.daily_transaction_count || 0) / 1000).toFixed(2)}K</div>
+            <div className="text-xl font-bold text-white">
+              {((stats?.daily_transaction_count || 0) / 1000).toFixed(2)}K
+            </div>
           )}
         </div>
       </div>
 
       {/* GRÁFICO DE TRANSAÇÕES DIÁRIAS */}
-      <div className="bg-[#111111] p-4 rounded-xl">
+      <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
         <h2 className="text-sm text-gray-300 mb-2">Transações diárias</h2>
         <div className="h-24 w-full">
           <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="w-full h-full">
@@ -217,8 +219,8 @@ export default function ApertumDashboard() {
       {/* ÚLTIMOS BLOCOS E TRANSAÇÕES EM GRID RESPONSIVO */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* ÚLTIMOS BLOCOS */}
-        <div className="bg-[#111111] p-4 rounded-xl">
-          <h2 className="text-lg font-bold mb-2">Últimos Blocos</h2>
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
+          <h2 className="text-lg font-bold mb-2 text-white">Últimos Blocos</h2>
           {loading ? (
             <div className="space-y-2">
               <div className="h-6 bg-gray-700 animate-pulse rounded"></div>
@@ -226,7 +228,7 @@ export default function ApertumDashboard() {
               <div className="h-6 bg-gray-700 animate-pulse rounded"></div>
             </div>
           ) : (
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm text-white">
               {blocks.map((block, index) => (
                 <li key={index} className="break-words">
                   #{block.height} • {block.time} atrás • Txn {block.txn} • Reward {block.reward}
@@ -237,8 +239,8 @@ export default function ApertumDashboard() {
         </div>
 
         {/* ÚLTIMAS TRANSAÇÕES */}
-        <div className="bg-[#111111] p-4 rounded-xl">
-          <h2 className="text-lg font-bold mb-2">Últimas Transações</h2>
+        <div className="bg-transparent border border-[#66e0cc] p-4 rounded-xl">
+          <h2 className="text-lg font-bold mb-2 text-white">Últimas Transações</h2>
           {loading ? (
             <div className="space-y-3">
               <div className="h-12 bg-gray-700 animate-pulse rounded"></div>
@@ -257,7 +259,7 @@ export default function ApertumDashboard() {
                     <span className="text-blue-300">{truncateHash(tx.hash)}</span>
                   </div>
                   <div className="text-right">
-                    <div>Value {tx.value}</div>
+                    <div className="text-white">Value {tx.value}</div>
                     <div className="text-[10px] text-gray-300">Fee {tx.fee}</div>
                   </div>
                 </li>

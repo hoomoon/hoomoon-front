@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { useSearchParams } from "next/navigation"
 import { Eye, EyeOff, Check, AlertCircle, ChevronDown, ChevronUp, Search, X } from "lucide-react"
 import Link from "next/link"
+import ParticlesBackground from "@/components/particles-background"
 
 export default function Cadastro() {
   // Estados para os campos do formulário
@@ -260,8 +261,22 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md space-y-6 bg-white border border-gray-200 p-8 rounded-xl shadow-md animate-in fade-in duration-500">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 relative w-full overflow-hidden">
+      {/* Fundo com partículas */}
+      <div className="fixed inset-0 z-0">
+        <ParticlesBackground />
+      </div>
+
+      {/* Gradientes animados (igual à landing page) */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[#66e0cc]/20 blur-[120px] animate-pulse"></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-purple-600/20 blur-[120px] animate-pulse"
+          style={{ animationDelay: "1s" }}
+        ></div>
+      </div>
+
+      <div className="w-full max-w-md space-y-6 bg-black border border-[#66e0cc] p-8 rounded-xl shadow-md animate-in fade-in duration-500 relative z-10">
         {ref && (
           <div className="text-center text-sm text-gray-600 font-medium bg-gray-50 py-2 px-3 rounded-md border border-gray-200">
             Patrocinador: <span className="text-black font-bold">{ref}</span>
@@ -300,7 +315,7 @@ export default function Cadastro() {
                 placeholder="Nome completo"
                 value={nome}
                 onChange={(e) => e && e.target && setNome(e.target.value)}
-                className={`bg-gray-100 text-black pr-10 ${
+                className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
                   errors.nome ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
                 }`}
               />
@@ -320,7 +335,7 @@ export default function Cadastro() {
                 placeholder="E-mail"
                 value={email}
                 onChange={(e) => e && e.target && setEmail(e.target.value)}
-                className={`bg-gray-100 text-black pr-10 ${
+                className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
                   errors.email ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
                 }`}
               />
@@ -338,9 +353,11 @@ export default function Cadastro() {
               <button
                 type="button"
                 onClick={() => setShowDropdown(!showDropdown)}
-                className={`flex items-center justify-between w-full px-4 py-2 rounded-md border ${
-                  errors.pais ? "border-red-400 bg-red-50" : "border-gray-300 bg-gray-100 hover:bg-gray-200"
-                } transition-colors`}
+                className={`flex items-center justify-between w-full px-4 py-2 rounded-xl border ${
+                  errors.pais
+                    ? "border-red-400 bg-transparent"
+                    : "border-[#66e0cc] bg-transparent hover:bg-[#66e0cc]/10"
+                } transition-colors text-white`}
               >
                 <div className="flex items-center">
                   <span className="mr-2">{paisSelecionado?.bandeira || "🌍"}</span>
@@ -352,22 +369,22 @@ export default function Cadastro() {
               {errors.pais && <p className="text-xs text-red-500 mt-1">{errors.pais}</p>}
 
               {showDropdown && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                  <div className="sticky top-0 bg-white p-2 border-b border-gray-200">
+                <div className="absolute z-10 mt-1 w-full bg-black border border-[#66e0cc] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                  <div className="sticky top-0 bg-black p-2 border-b border-[#66e0cc]/30">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#66e0cc] h-4 w-4" />
                       <Input
                         type="text"
                         placeholder="Buscar país"
                         value={filtroPais}
                         onChange={handleFiltroPaisChange}
-                        className="pl-9 pr-8 py-1 h-9 border-gray-200"
+                        className="pl-9 pr-8 py-1 h-9 bg-transparent border-[#66e0cc]/50 text-white"
                       />
                       {filtroPais && (
                         <button
                           type="button"
                           onClick={() => setFiltroPais("")}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#66e0cc] hover:text-white"
                         >
                           <X size={14} />
                         </button>
@@ -382,15 +399,15 @@ export default function Cadastro() {
                           key={p.nome}
                           type="button"
                           onClick={() => handleSelectPais(p)}
-                          className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"
+                          className="w-full px-4 py-2 text-left text-white hover:bg-[#66e0cc]/10 flex items-center"
                         >
                           <span className="mr-2">{p.bandeira}</span>
                           <span>{p.nome}</span>
-                          {p.codigo && <span className="ml-auto text-gray-500 text-sm">{p.codigo}</span>}
+                          {p.codigo && <span className="ml-auto text-[#66e0cc] text-sm">{p.codigo}</span>}
                         </button>
                       ))
                     ) : (
-                      <div className="px-4 py-2 text-gray-500 text-center">Nenhum país encontrado</div>
+                      <div className="px-4 py-2 text-[#66e0cc]/70 text-center">Nenhum país encontrado</div>
                     )}
                   </div>
                 </div>
@@ -405,7 +422,7 @@ export default function Cadastro() {
                 placeholder="Telefone"
                 value={telefone}
                 onChange={handleTelefoneChange}
-                className={`bg-gray-100 text-black pr-10 ${
+                className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
                   errors.telefone ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
                 }`}
               />
@@ -426,7 +443,7 @@ export default function Cadastro() {
                   placeholder="CPF"
                   value={cpf}
                   onChange={handleCpfChange}
-                  className={`bg-gray-100 text-black pr-10 ${
+                  className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
                     errors.cpf ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
                   }`}
                 />
@@ -447,7 +464,7 @@ export default function Cadastro() {
                 placeholder="Senha"
                 value={senha}
                 onChange={(e) => e && e.target && setSenha(e.target.value)}
-                className={`bg-gray-100 text-black pr-10 ${
+                className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
                   errors.senha ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
                 }`}
               />
@@ -499,7 +516,7 @@ export default function Cadastro() {
                 placeholder="Confirmar senha"
                 value={confirmarSenha}
                 onChange={(e) => e && e.target && setConfirmarSenha(e.target.value)}
-                className={`bg-gray-100 text-black pr-10 ${
+                className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
                   errors.confirmarSenha ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
                 }`}
               />

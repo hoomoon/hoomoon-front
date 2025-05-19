@@ -5,9 +5,7 @@ import type React from "react"
 import { useState, useEffect, useCallback } from "react"
 import {
   Bell,
-  Moon,
   LogOut,
-  Globe,
   User,
   Wallet,
   Menu,
@@ -18,20 +16,20 @@ import {
   Gift,
   Headset,
   Settings,
-  BookOpen,
   BarChart2,
   X,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Filter,
-  Plus,
   Briefcase,
+  Share2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import ApertumDashboard from "./components/apertum-dashboard"
+import WalletOverview from "./components/wallet-overview"
+import ParticlesBackground from "./components/particles-background"
+import LanguageSelector from "./components/language-selector"
+import { useRouter } from "next/navigation"
 
 // Define TypeScript interfaces for our components
 interface SidebarItemProps {
@@ -115,13 +113,42 @@ export default function BinanbotDashboard() {
     setShowNotifications((prev) => !prev)
   }, [])
 
+  // Função para lidar com o logout
+  const router = useRouter()
+  const handleLogout = useCallback(() => {
+    // Limpar dados de autenticação do localStorage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+      // Limpar quaisquer outros dados de autenticação que possam existir
+      sessionStorage.clear()
+    }
+
+    // Redirecionar para a página de login
+    router.push("/login")
+  }, [router])
+
   // Se não estiver no cliente, retorne um placeholder
   if (!isClient) {
     return <div className="flex items-center justify-center min-h-screen bg-black text-white">Carregando...</div>
   }
 
   return (
-    <div className="flex min-h-screen bg-black text-white w-full overflow-x-hidden">
+    <div className="flex min-h-screen bg-black text-white w-full overflow-x-hidden relative">
+      {/* Fundo com partículas */}
+      <div className="fixed inset-0 z-0">
+        <ParticlesBackground />
+      </div>
+
+      {/* Gradientes animados (igual à landing page) */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[#66e0cc]/20 blur-[120px] animate-pulse"></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-purple-600/20 blur-[120px] animate-pulse"
+          style={{ animationDelay: "1s" }}
+        ></div>
+      </div>
+
       {/* Backdrop overlay when sidebar is open */}
       {menuOpen && (
         <div
@@ -135,9 +162,9 @@ export default function BinanbotDashboard() {
       <div
         className={`sidebar fixed top-0 left-0 h-full w-[280px] bg-black text-white shadow-xl transform ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 flex flex-col`}
+        } transition-transform duration-300 ease-in-out z-50 flex flex-col border-r border-[#66e0cc]`}
       >
-        <div className="flex flex-col items-center justify-center p-6 border-b border-gray-800">
+        <div className="flex flex-col items-center justify-center p-6 border-b border-[#66e0cc]">
           <div className="h-16 w-16 relative mb-2">
             <img
               src="/images/hoo-logo.png"
@@ -154,13 +181,13 @@ export default function BinanbotDashboard() {
           <h2 className="text-lg font-bold text-white">HOOMOON</h2>
         </div>
 
-        <div className="p-4 border-b border-gray-800">
+        <div className="p-4 border-b border-[#66e0cc]/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
               JD
             </div>
             <div>
-              <p className="font-medium">João Dias</p>
+              <p className="font-medium text-white">João Dias</p>
               <p className="text-xs text-gray-400">ID: 87654321</p>
             </div>
           </div>
@@ -175,23 +202,24 @@ export default function BinanbotDashboard() {
           <SidebarItem icon={<Users size={18} />} label="Programa de Afiliados" href="/afiliados" />
           <SidebarItem icon={<Gift size={18} />} label="Meus Ganhos" href="/meus-ganhos" />
           <SidebarItem icon={<Wallet size={18} />} label="Saque" href="/saque" />
-          <SidebarItem icon={<Headset size={18} />} label="Suporte" />
-          <SidebarItem icon={<Settings size={18} />} label="Configuração" />
-          <SidebarItem icon={<BookOpen size={18} />} label="Material de Marketing" />
+          <SidebarItem icon={<Headset size={18} />} label="Suporte" href="/suporte" />
+          <SidebarItem icon={<Settings size={18} />} label="Configuração" href="/configuracao" />
+          <SidebarItem icon={<Share2 size={18} />} label="Material de Marketing" href="/material-de-marketing" />
           <SidebarItem icon={<BarChart2 size={18} />} label="Opções Binárias" />
+          <SidebarItem icon={<User size={18} />} label="Perfil" href="/perfil" />
         </nav>
 
-        <div className="p-4 border-t border-gray-800 mt-auto">
-          <Button variant="destructive" className="w-full justify-start" size="sm">
+        <div className="p-4 border-t border-[#66e0cc]/50 mt-auto">
+          <Button variant="destructive" className="w-full justify-start" size="sm" onClick={handleLogout}>
             <LogOut size={16} className="mr-2" /> Sair
           </Button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col w-full">
+      <div className="flex-1 flex flex-col w-full relative z-10">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex justify-between items-center px-4 py-3 bg-[#111] shadow w-full">
+        <header className="sticky top-0 z-30 flex justify-between items-center px-4 py-3 bg-transparent border-b border-[#66e0cc] shadow-none w-full">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -215,26 +243,10 @@ export default function BinanbotDashboard() {
                 }}
               />
             </div>
-            <nav className="hidden lg:flex gap-4 text-sm text-gray-300">
-              <a href="#" className="hover:text-white transition-colors font-medium">
-                Painel
-              </a>
-              <a href="#" className="hover:text-white transition-colors">
-                Comércio BNBC
-              </a>
-              <a href="#" className="hover:text-white transition-colors">
-                Lançamentos aéreos
-              </a>
-              <a href="#" className="hover:text-white transition-colors">
-                Trocar
-              </a>
-              <a href="#" className="hover:text-white transition-colors">
-                Afiliados
-              </a>
-            </nav>
+            {/* REMOVED NAVIGATION */}
           </div>
 
-          <div className="flex items-center gap-3 text-gray-300">
+          <div className="flex items-center gap-3 text-white">
             <div className="relative">
               <Button
                 variant="ghost"
@@ -250,9 +262,9 @@ export default function BinanbotDashboard() {
               </Button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-[#111] border border-gray-800 rounded-md shadow-lg p-2 z-50">
+                <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-transparent border border-[#66e0cc] rounded-md shadow-none p-2 z-50">
                   <div className="flex justify-between items-center mb-2 p-2">
-                    <h3 className="font-medium">Notificações</h3>
+                    <h3 className="font-medium text-white">Notificações</h3>
                     <Button variant="ghost" size="sm" onClick={() => setShowNotifications(false)}>
                       <X size={14} />
                     </Button>
@@ -290,7 +302,7 @@ export default function BinanbotDashboard() {
               </Button>
             </Link>
 
-            <div className="bg-gray-800 px-3 py-1 rounded text-sm hidden sm:block">$ 1.267,28</div>
+            {/* REMOVED MONETARY VALUE */}
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -298,34 +310,32 @@ export default function BinanbotDashboard() {
                   <User size={18} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-[#111] border-gray-800 text-white">
-                <DropdownMenuItem className="hover:bg-gray-800">
-                  <User size={16} className="mr-2" /> Perfil
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-800">
-                  <Wallet size={16} className="mr-2" /> Carteira
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-800">
-                  <Globe size={16} className="mr-2" /> Idioma
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-800">
-                  <Moon size={16} className="mr-2" /> Tema escuro
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-red-500 hover:bg-gray-800">
+              <DropdownMenuContent className="bg-transparent border border-[#66e0cc] text-white">
+                <Link href="/perfil" passHref>
+                  <DropdownMenuItem className="hover:bg-[#66e0cc]/10 text-white cursor-pointer">
+                    <User size={16} className="mr-2" /> Perfil
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuItem className="text-red-500 hover:bg-[#66e0cc]/10" onClick={handleLogout}>
                   <LogOut size={16} className="mr-2" /> Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="ghost" size="icon" className="hidden md:flex" aria-label="Tema">
-              <Moon size={18} />
-            </Button>
+            {/* REMOVED MOON BUTTON */}
 
-            <Button variant="ghost" size="icon" className="hidden md:flex" aria-label="Idioma">
-              <Globe size={18} />
-            </Button>
+            {/* Novo seletor de idiomas posicionado antes do botão de sair */}
+            <div className="hidden md:flex">
+              <LanguageSelector />
+            </div>
 
-            <Button variant="ghost" size="icon" className="text-red-500 hidden md:flex" aria-label="Sair">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hidden md:flex"
+              aria-label="Sair"
+              onClick={handleLogout}
+            >
               <LogOut size={18} />
             </Button>
           </div>
@@ -333,53 +343,9 @@ export default function BinanbotDashboard() {
 
         {/* Main Content */}
         <main className="flex-1 w-full max-w-full overflow-x-hidden">
-          {/* Visão Geral da Carteira */}
+          {/* Visão Geral da Carteira - Novo Componente */}
           <div className="px-4 py-6 w-full">
-            <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-              <h2 className="text-lg font-semibold">Visão geral da carteira</h2>
-              <Button variant="outline" size="sm" className="text-gray-300 border-gray-700">
-                <Filter size={14} className="mr-2" /> Filtrar
-              </Button>
-            </div>
-
-            <div className="bg-[#111] p-5 rounded-xl flex flex-col gap-6 md:flex-row md:justify-between w-full">
-              <div>
-                <div className="text-sm text-gray-400">Saldo total</div>
-                <div className="text-2xl font-bold mt-1">≈$ 2.811,88</div>
-                <div className="flex items-center text-xs text-[#66e0cc] mt-1">
-                  <span className="mr-1">+2.4%</span>
-                  <span className="text-gray-500">nas últimas 24h</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6 md:flex md:gap-10">
-                <div>
-                  <div className="text-sm text-gray-400 mb-1">Rendas</div>
-                  <div className="flex items-center">
-                    <ArrowUpRight size={16} className="text-[#66e0cc] mr-2" />
-                    <div className="text-[#66e0cc] font-semibold">$ 0,00</div>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">0 transações</div>
-                </div>
-
-                <div>
-                  <div className="text-sm text-gray-400 mb-1">Retiradas</div>
-                  <div className="flex items-center">
-                    <ArrowDownLeft size={16} className="text-red-400 mr-2" />
-                    <div className="text-red-400 font-semibold">$ 0,00</div>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">0 transações</div>
-                </div>
-
-                <div className="col-span-2 md:col-span-1">
-                  <Link href="/deposito">
-                    <Button className="w-full md:w-auto bg-[#66e0cc] hover:bg-[#50c4b0] text-black">
-                      <Plus size={16} className="mr-2" /> Novo Depósito
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <WalletOverview />
           </div>
 
           {/* Espaço onde estava a seção "Carteira Spot" - agora com o ApertumDashboard */}
@@ -402,7 +368,7 @@ function SidebarItem({ icon, label, active = false, href = "#" }: SidebarItemPro
     <Link
       href={href || "#"}
       className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
-        active ? "bg-[#66e0cc]/20 text-[#66e0cc] font-medium" : "text-gray-300 hover:bg-gray-800 hover:text-[#66e0cc]"
+        active ? "bg-[#66e0cc]/20 text-[#66e0cc] font-medium" : "text-white hover:bg-[#66e0cc]/10 hover:text-[#66e0cc]"
       }`}
     >
       {icon}
@@ -418,9 +384,9 @@ function NotificationItem({ title, message, time, isNew = false }: NotificationI
   }
 
   return (
-    <div className={`p-3 border-b border-gray-800 ${isNew ? "bg-gray-800/30" : ""}`}>
+    <div className={`p-3 border-b border-[#66e0cc]/30 ${isNew ? "bg-[#66e0cc]/10" : ""}`}>
       <div className="flex justify-between">
-        <h4 className="font-medium text-sm">{title}</h4>
+        <h4 className="font-medium text-sm text-white">{title}</h4>
         {isNew && <Badge className="bg-[#66e0cc] text-[10px] text-black">Novo</Badge>}
       </div>
       <p className="text-xs text-gray-400 mt-1">{message}</p>
