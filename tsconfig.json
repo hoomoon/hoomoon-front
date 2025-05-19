@@ -2,6 +2,15 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "types": [
+      "d3-color",
+      "d3-ease",
+      "d3-interpolate",
+      "d3-path",
+      "d3-scale",
+      "d3-time",
+      "d3-timer"
+    ],
     "target": "ES6",
     "skipLibCheck": true,
     "strict": true,
