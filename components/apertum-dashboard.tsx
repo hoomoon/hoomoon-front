@@ -1,3 +1,4 @@
+// component/apertum-dashboard.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -202,12 +203,12 @@ export default function ApertumDashboard() {
         <div className="h-24 w-full">
           <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="w-full h-full">
             <path
-              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30 100,30 L0,30 Z"
+              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30 0,30 Z"
               fill="#66e0cc"
               opacity="0.3"
             />
             <path
-              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30"
+              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30 0,30 Z"
               stroke="#66e0cc"
               strokeWidth="2"
               fill="none"

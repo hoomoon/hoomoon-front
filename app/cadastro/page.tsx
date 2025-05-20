@@ -1,3 +1,4 @@
+// app/cadastro/page.tsx
 "use client"
 
 import type React from "react"
@@ -9,9 +10,12 @@ import { useSearchParams } from "next/navigation"
 import { Eye, EyeOff, Check, AlertCircle, ChevronDown, ChevronUp, Search, X } from "lucide-react"
 import Link from "next/link"
 import ParticlesBackground from "@/components/particles-background"
+import { useRouter } from 'next/navigation'
+import { register } from '@/lib/auth'
 
 export default function Cadastro() {
   // Estados para os campos do formulário
+  const router = useRouter()
   const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")
   const [telefone, setTelefone] = useState("")
@@ -208,38 +212,28 @@ export default function Cadastro() {
 
   // Função para lidar com o envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
-    if (e && e.preventDefault) {
-      e.preventDefault()
-    }
+  e.preventDefault()
+  if (!validarFormulario()) return
 
-    if (!validarFormulario()) return
-
-    setIsSubmitting(true)
-
-    try {
-      // Simulação de envio para API
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      // Aqui você faria a chamada real para sua API
-      console.log({
-        nome,
-        email,
-        telefone,
-        pais,
-        cpf: isBrasil ? cpf : "",
-        senha,
-        codigoReferencia: ref,
-      })
-
-      // Redirecionar ou mostrar mensagem de sucesso
-      alert("Cadastro realizado com sucesso!")
-    } catch (error) {
-      console.error("Erro ao enviar formulário:", error)
-      setErrors({ form: "Ocorreu um erro ao processar seu cadastro. Tente novamente." })
-    } finally {
-      setIsSubmitting(false)
-    }
+  setIsSubmitting(true)
+  try {
+    await register({
+      name: nome.trim(),
+      email: email.trim(),
+      phone: telefone,
+      country: pais,
+      cpf: isBrasil ? cpf.replace(/\D/g, '') : undefined,
+      password: senha,
+      sponsor_code: ref || undefined,
+    })
+    // on success, backend sets HTTP-Only cookies
+    router.push('/dashboard')
+  } catch (err: any) {
+    setErrors({ form: err.message })
+  } finally {
+    setIsSubmitting(false)
   }
+}
 
   // Manipuladores de eventos seguros
   const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {

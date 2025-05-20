@@ -1,3 +1,4 @@
+// app/dashboard/layout.tsx
 import type React from "react"
 
 export default function DashboardLayout({

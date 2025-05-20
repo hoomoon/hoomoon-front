@@ -1,3 +1,4 @@
+// binanbot-dashboard.tsx
 "use client"
 
 import type React from "react"
@@ -30,6 +31,7 @@ import WalletOverview from "./components/wallet-overview"
 import ParticlesBackground from "./components/particles-background"
 import LanguageSelector from "./components/language-selector"
 import { useRouter } from "next/navigation"
+import { logout } from "@/lib/auth"
 
 // Define TypeScript interfaces for our components
 interface SidebarItemProps {
@@ -115,18 +117,15 @@ export default function BinanbotDashboard() {
 
   // Função para lidar com o logout
   const router = useRouter()
-  const handleLogout = useCallback(() => {
-    // Limpar dados de autenticação do localStorage
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
-      // Limpar quaisquer outros dados de autenticação que possam existir
-      sessionStorage.clear()
-    }
-
-    // Redirecionar para a página de login
-    router.push("/login")
-  }, [router])
+  const handleLogout = useCallback(async () => {
+  try {
+    await logout()            // chama seu endpoint /api/logout/
+  } catch (err) {
+    console.error("Logout falhou", err)
+  } finally {
+    router.push("/login")     // manda pro login mesmo se der erro
+  }
+}, [router])
 
   // Se não estiver no cliente, retorne um placeholder
   if (!isClient) {

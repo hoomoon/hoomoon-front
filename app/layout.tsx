@@ -1,7 +1,9 @@
+// app/layout.tsx
 import type React from "react"
 import "./globals.css"
 import type { Metadata } from "next"
 import { Urbanist } from "next/font/google"
+import { AuthProvider } from "./providers/AuthProvider"
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -23,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${urbanist.variable}`}>
-      <body className="font-urbanist antialiased">{children}</body>
+      <body className="font-urbanist antialiased">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }
