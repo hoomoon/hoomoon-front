@@ -32,6 +32,7 @@ import ParticlesBackground from "./components/particles-background"
 import LanguageSelector from "./components/language-selector"
 import { useRouter } from "next/navigation"
 import { logout } from "@/lib/auth"
+import { useAuth } from '@/app/providers/AuthProvider'
 
 // Define TypeScript interfaces for our components
 interface SidebarItemProps {
@@ -117,15 +118,17 @@ export default function BinanbotDashboard() {
 
   // Função para lidar com o logout
   const router = useRouter()
+  const { setUser } = useAuth()
   const handleLogout = useCallback(async () => {
   try {
-    await logout()            // chama seu endpoint /api/logout/
+    await logout()
+    setUser(null)
   } catch (err) {
     console.error("Logout falhou", err)
   } finally {
     router.push("/login")     // manda pro login mesmo se der erro
   }
-}, [router])
+}, [router, setUser])
 
   // Se não estiver no cliente, retorne um placeholder
   if (!isClient) {
