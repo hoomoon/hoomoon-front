@@ -27,7 +27,14 @@ export default function LoginPage() {
       setUser(u)
       router.push("/dashboard")
     } catch (err: any) {
-      setError(err.message || "Falha no login")
+      let msg = "Falha no login. Tente novamente."
+      const raw = typeof err === 'string' ? err : err.message || ''
+      if (raw.includes("No active account found")) {
+        msg = "E-mail ou senha incorretos."
+      } else if (raw.includes("Network Error")) {
+        msg = "Erro de conexão. Verifique sua internet."
+      }
+      setError(msg)
     } finally {
       setLoading(false)
     }
@@ -51,7 +58,7 @@ export default function LoginPage() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm mb-1">Email</label>
+          <label htmlFor="email" className="block text-sm mb-1">E-mail</label>
           <input
             id="email"
             type="email"
@@ -85,7 +92,7 @@ export default function LoginPage() {
         </button>
 
         <p className="text-center text-sm mt-4">
-          Não tem conta?{" "}
+          Não tem conta?{' '}
           <Link href="/cadastro" className="text-[#66e0cc] underline">
             Cadastre-se
           </Link>

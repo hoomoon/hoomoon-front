@@ -154,7 +154,7 @@ export default function LandingPage() {
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                 <TypewriterEffect
-                  text="Não criamos uma moeda. Criamos um caminho direto até a valorização dela."
+                  text={`Nãão criamos uma moeda. Criamos um caminho direto até a valorização dela`}
                   delay={3000}
                 />
               </h1>
