@@ -1,3 +1,4 @@
+// components/typewriter-effect.tsx
 "use client"
 
 import { useState, useEffect, useRef } from "react"

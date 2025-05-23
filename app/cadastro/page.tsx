@@ -12,6 +12,7 @@ import Link from "next/link"
 import ParticlesBackground from "@/components/particles-background"
 import { useRouter } from 'next/navigation'
 import { register } from '@/lib/auth'
+import { AxiosError } from "axios"
 
 export default function Cadastro() {
   // Estados para os campos do formulário
@@ -213,6 +214,7 @@ export default function Cadastro() {
   // Função para lidar com o envio do formulário
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
+  setErrors({})
   if (!validarFormulario()) return
 
   setIsSubmitting(true)
@@ -229,10 +231,32 @@ export default function Cadastro() {
     // on success, backend sets HTTP-Only cookies
     router.push('/dashboard')
   } catch (err: any) {
-    setErrors({ form: err.message })
-  } finally {
-    setIsSubmitting(false)
-  }
+      let parsedErrors: Record<string, string[]> | null = null
+      if ((err as AxiosError).isAxiosError) {
+        parsedErrors = (err as AxiosError).response?.data as Record<string,string[]> || null
+      } else {
+        try {
+          const msgData = JSON.parse(err.message)
+          if (msgData && typeof msgData === 'object') parsedErrors = msgData
+        } catch {}
+      }
+
+      if (parsedErrors) {
+        const fieldErrors: Record<string,string> = {}
+        Object.entries(parsedErrors).forEach(([field, msgs]) => {
+          const text = Array.isArray(msgs) ? msgs.join(' ') : String(msgs)
+          fieldErrors[field] =
+            field === 'email' && text.includes('already exists')
+              ? 'Já existe um usuário com este e-mail.'
+              : text
+        })
+        setErrors(fieldErrors)
+      } else {
+        setErrors({ form: err.message || 'Erro inesperado. Tente novamente.' })
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
 }
 
   // Manipuladores de eventos seguros
@@ -279,8 +303,8 @@ export default function Cadastro() {
 
         <div className="flex justify-center">
           <img
-            src="/logo-dashboard.png"
-            alt="Logo da empresa"
+            src="/images/hoo-logo.png"
+            alt="Hoomoon Logo"
             className="w-48 mb-4"
             onError={(e) => {
               if (e && e.target) {
