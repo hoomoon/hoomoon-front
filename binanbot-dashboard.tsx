@@ -118,7 +118,7 @@ export default function BinanbotDashboard() {
 
   // Função para lidar com o logout
   const router = useRouter()
-  const { setUser } = useAuth()
+  const { user, setUser } = useAuth()
   const handleLogout = useCallback(async () => {
   try {
     await logout()
@@ -186,11 +186,11 @@ export default function BinanbotDashboard() {
         <div className="p-4 border-b border-[#66e0cc]/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-              JD
+              {user?.name ? getInitials(user.name) : ''}
             </div>
             <div>
-              <p className="font-medium text-white">João Dias</p>
-              <p className="text-xs text-gray-400">ID: 87654321</p>
+              <p className="font-medium text-white">{user?.name?.toUpperCase()}</p>
+              <p className="text-xs text-gray-400">ID: {user?.id}</p>
             </div>
           </div>
         </div>
@@ -359,6 +359,15 @@ export default function BinanbotDashboard() {
     </div>
   )
 }
+
+function getInitials(name: string) {
+  return name
+    .split(' ')
+    .map(part => part.charAt(0).toUpperCase())
+    .join('')
+    .slice(0, 2)
+}
+
 
 // Sidebar Item Component
 function SidebarItem({ icon, label, active = false, href = "#" }: SidebarItemProps) {
