@@ -14,12 +14,12 @@ export default function ApertumDashboard() {
 
   // Dados mockados para fallback quando a API falha
   const mockStats = {
-    total_blocks: 939735,
-    average_block_time: 2.1,
-    total_transactions: 1041722,
-    total_addresses: 38729,
-    gas_price: 22,
-    daily_transaction_count: 18410,
+    total_blocks: 0,
+    average_block_time: 0,
+    total_transactions: 0,
+    total_addresses: 0,
+    gas_price: 0,
+    daily_transaction_count: 0,
   }
 
   const mockBlocks = [
