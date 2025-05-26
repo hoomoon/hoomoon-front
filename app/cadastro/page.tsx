@@ -549,6 +549,23 @@ export default function Cadastro() {
             {errors.confirmarSenha && <p className="text-xs text-red-500 mt-1">{errors.confirmarSenha}</p>}
           </div>
 
+          {/* Código de Indicação */}
+          <div className="space-y-1">
+            <Input
+              type="text"
+              placeholder="Código de Indicação (opcional)"
+              value={ref}
+              onChange={(e) => setRef(e.target.value)}
+              disabled={!!searchParams.get("ref")}
+              className="bg-transparent border border-[#66e0cc] text-white"
+            />
+            {errors.sponsor_code && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.sponsor_code}
+              </p>
+            )}
+          </div>
+
           <Button
             type="submit"
             disabled={isSubmitting}
