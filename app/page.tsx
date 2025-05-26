@@ -52,35 +52,35 @@ export default function LandingPage() {
 
   return (
     <>
-      {/* Preloader */}
+      {/* Preloader institucional */}
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
+          {/* fundo pulsante */}
           <motion.div
-            className="flex flex-col items-center"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="w-32 h-32 relative mb-8">
-              <Image src="/images/hoomoon-logo.png" alt="HOOMOON Logo" layout="fill" objectFit="contain" priority />
-            </div>
-            <div className="h-1 w-48 bg-zinc-800 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#66e0cc] to-purple-600"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1.5, ease: "easeInOut" }}
-              ></motion.div>
-            </div>
-          </motion.div>
+            className="absolute inset-0 bg-white"
+            animate={{ opacity: [1, 0.8, 1], scale: [1, 1.02, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          <motion.div
+           className="relative flex flex-col items-center"
+           initial={{ scale: 0.8, opacity: 0 }}
+           animate={{ scale: 1, opacity: 1 }}
+           transition={{ duration: 0.6, delay: 0.2 }}
+         >
+           {/* Spinner circular */}
+           <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-300 border-t-[#66e0cc] mb-4"></div>
+           <p className="text-gray-800 font-medium text-lg text-center">
+             Carregando sua conexão com a Hoomoon...
+           </p>
+         </motion.div>
         </motion.div>
       )}
-
       <div ref={containerRef} className="bg-black min-h-screen font-urbanist text-white overflow-hidden">
         {/* Particles Background */}
         <div className="fixed inset-0 z-0">
@@ -95,11 +95,23 @@ export default function LandingPage() {
           transition={{ duration: 0.5, delay: 2.2 }}
         >
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div className="text-2xl font-bold text-white flex items-center gap-2">
-              <div className="w-8 h-8 relative">
-                <Image src="/images/hoomoon-logo.png" alt="HOOMOON Logo" layout="fill" objectFit="contain" priority />
+            {/* Logo  frase institucional */}
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 relative">
+                  <Image
+                    src="/images/hoomoon-logo.png"
+                    alt="HOOMOON Logo"
+                    fill
+                    style={{ objectFit: "contain" }}
+                    priority
+                  />
+                </div>
+                <span className="text-2xl font-bold text-white">HOOMOON</span>
               </div>
-              HOO<span className="text-[#66e0cc]">MOON</span>
+              <p className="text-xs text-gray-300">
+                Esta plataforma é um ambiente oficial da Hoomoon.
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <Link href="/login" className="text-sm text-gray-300 hover:text-[#66e0cc] transition-colors">
