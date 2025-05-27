@@ -49,6 +49,19 @@ export default function LoginPage() {
         className="relative z-10 bg-transparent border border-[#66e0cc] rounded-xl p-8 space-y-4 max-w-md w-full"
         noValidate
       >
+      <div className="flex justify-center">
+          <img
+            src="/images/hoo-logo.png"
+            alt="Hoomoon Logo"
+            className="w-48 mb-4"
+            onError={(e) => {
+              const target = e.currentTarget as HTMLImageElement
+              target.onerror = null
+              target.src =
+                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60' viewBox='0 0 160 60' fill='none'%3E%3Crect width='160' height='60' rx='8' fill='%2366e0cc'/%3E%3Ctext x='50%' y='50%' fontFamily='Arial' fontSize='16' fill='black' textAnchor='middle' dominantBaseline='middle'%3ELOGO%3C/text%3E%3C/svg%3E"
+            }}
+          />
+        </div>
         <h2 className="text-2xl font-bold text-center">Entrar na HOOMOON</h2>
 
         {error && (
