@@ -30,6 +30,9 @@ export default function Cadastro() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [mounted, setMounted] = useState(false)
+  const [sponsorName, setSponsorName] = useState<string | null>(null)
+  const [sponsorChecked, setSponsorChecked] = useState(false)
+  const base = process.env.NEXT_PUBLIC_API_URL || "https://www.api.hoomoon.ai"
 
   // Estados para o dropdown de países
   const [showDropdown, setShowDropdown] = useState(false)
@@ -77,6 +80,13 @@ export default function Cadastro() {
     }
   }, [mounted])
 
+  function capitalizeName(name: string): string {
+    return name
+      .split(' ')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ');
+  }
+
   // Obter parâmetros da URL de forma segura
   const searchParams = useSearchParams()
 
@@ -86,14 +96,47 @@ export default function Cadastro() {
   // Obter código de referência da URL
   useEffect(() => {
     if (mounted && searchParams) {
-      try {
-        const indicacao = searchParams.get("ref") || ""
-        setRef(indicacao)
-      } catch (error) {
-        console.error("Erro ao obter parâmetros da URL:", error)
+      const indicacao = searchParams.get("ref") || ""
+      setRef(indicacao)
+
+      if (indicacao) {
+        fetch(`${base}/api/sponsor/${indicacao}/`)
+          .then(res => {
+            if (!res.ok) throw new Error()
+            return res.json()
+          })
+          .then(data => setSponsorName(capitalizeName(data.name)))
+          .catch(() => setSponsorName(null))
+          .finally(() => setSponsorChecked(true))
       }
     }
   }, [searchParams, mounted])
+
+  // Verifica manualmente o código de indicação à medida que o usuário digita
+  useEffect(() => {
+    if (!mounted) return
+    // não re-executa se veio da URL
+    if (searchParams.get("ref")) return
+    const pattern = /^HOO-[A-Za-z0-9]{8}$/
+    if (pattern.test(ref)) {
+      setSponsorChecked(false)
+      fetch(`${base}/api/sponsor/${ref}/`)
+        .then(res => {
+          if (!res.ok) throw new Error()
+          return res.json()
+        })
+        .then(data => setSponsorName(capitalizeName(data.name)))
+        .catch(() => setSponsorName(null))
+        .finally(() => setSponsorChecked(true))
+    } else if (ref.length === 12) {
+      // formato completo mas inválido
+      setSponsorName(null)
+      setSponsorChecked(true)
+    } else {
+      // input incompleto
+      setSponsorChecked(false)
+    }
+  }, [ref, mounted])
 
   // Função para selecionar país
   const handleSelectPais = (paisSelecionado: { nome: string; codigo: string; bandeira: string }) => {
@@ -295,9 +338,12 @@ export default function Cadastro() {
       </div>
 
       <div className="w-full max-w-md space-y-6 bg-black border border-[#66e0cc] p-8 rounded-xl shadow-md animate-in fade-in duration-500 relative z-10">
-        {ref && (
+        {ref && sponsorChecked && (
           <div className="text-center text-sm text-gray-600 font-medium bg-gray-50 py-2 px-3 rounded-md border border-gray-200">
-            Patrocinador: <span className="text-black font-bold">{ref}</span>
+            {sponsorName
+              ? <>Você está sendo indicado por: <strong>{sponsorName}</strong></>
+              : <>Indicação não identificada</>
+            }
           </div>
         )}
 
@@ -555,7 +601,11 @@ export default function Cadastro() {
               type="text"
               placeholder="Código de Indicação (opcional)"
               value={ref}
-              onChange={(e) => setRef(e.target.value)}
+              onChange={e => {
+                const v = e.target.value.toUpperCase()
+                setRef(v)
+                setSponsorChecked(false)
+              }}
               disabled={!!searchParams.get("ref")}
               className="bg-transparent border border-[#66e0cc] text-white"
             />

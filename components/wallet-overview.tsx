@@ -14,7 +14,8 @@ export default function WalletOverview() {
   const { user } = useAuth()
   const [totalMembros, setTotalMembros] = useState(0)
 
-  const base = process.env.NEXT_PUBLIC_API_URL || "https://www.hoomoon.ai"
+  const base = process.env.NEXT_PUBLIC_BASE_URL || "https://www.hoomoon.ai"
+  const baseApi = process.env.NEXT_PUBLIC_API_URL || "https://api.hoomoon.ai"
   const link = user?.referral_code
   ? `${base}/cadastro?ref=${user.referral_code}`
   : ""
@@ -28,7 +29,7 @@ export default function WalletOverview() {
 
 useEffect(() => {
   async function loadTotal() {
-    const res = await fetch(`${base}/api/minha-rede/`, {
+    const res = await fetch(`${baseApi}/api/minha-rede/`, {
       credentials: "include",
     })
     if (!res.ok) return
@@ -40,7 +41,7 @@ useEffect(() => {
     setTotalMembros(total)
   }
   loadTotal()
-}, [base])
+}, [baseApi])
 
   return (
     <div className="text-white space-y-4">
