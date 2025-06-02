@@ -40,31 +40,83 @@ export default function ApertumHorizontalTicker() {
     }
   }, [])
 
-  const tickerItems = Array(10)
-    .fill(null)
-    .map((_, index) => (
-      <div key={index} className="flex items-center space-x-3 px-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-transparent border border-[#66e0cc]">
-            <img
-              src="/assets/apertum-logo.png"
-              alt="HooMoon"
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                target.onerror = null
-                target.src =
-                  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2366e0cc'/%3E%3Ctext x='12' y='14' fontFamily='Arial' fontSize='8' fill='%23132c4c' textAnchor='middle'%3EH%3C/text%3E%3C/svg%3E"
-              }}
-            />
-          </div>
-          <span className="font-bold text-white whitespace-nowrap">HooMoon</span>
-          <span className="text-[#66e0cc] whitespace-nowrap font-medium">$HMON</span>
-          <span className="text-white whitespace-nowrap">R$ 7,14</span>
-          <span className="text-green-400 whitespace-nowrap">+2.72%</span>
+  // Dados das criptomoedas
+  const cryptoData = [
+    {
+      name: "HooMoon",
+      symbol: "$HMON",
+      price: "R$ 7,14",
+      change: "+2.72%",
+      logo: "/images/hoomoon-logo-new.png",
+      isPositive: true,
+    },
+    {
+      name: "Aperthum",
+      symbol: "$APTM",
+      price: "R$ 12,85",
+      change: "+5.43%",
+      logo: "/assets/aperthum-logo-new.png",
+      isPositive: true,
+    },
+    {
+      name: "HooMoon",
+      symbol: "$HMON",
+      price: "R$ 7,14",
+      change: "+2.72%",
+      logo: "/images/hoomoon-logo-new.png",
+      isPositive: true,
+    },
+    {
+      name: "Aperthum",
+      symbol: "$APTM",
+      price: "R$ 12,85",
+      change: "+5.43%",
+      logo: "/assets/aperthum-logo-new.png",
+      isPositive: true,
+    },
+    {
+      name: "HooMoon",
+      symbol: "$HMON",
+      price: "R$ 7,14",
+      change: "+2.72%",
+      logo: "/images/hoomoon-logo-new.png",
+      isPositive: true,
+    },
+    {
+      name: "Aperthum",
+      symbol: "$APTM",
+      price: "R$ 12,85",
+      change: "+5.43%",
+      logo: "/assets/aperthum-logo-new.png",
+      isPositive: true,
+    },
+  ]
+
+  const tickerItems = cryptoData.map((crypto, index) => (
+    <div key={index} className="flex items-center space-x-3 px-4">
+      <div className="flex items-center space-x-2">
+        <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-transparent border border-[#66e0cc]">
+          <img
+            src={crypto.logo || "/placeholder.svg"}
+            alt={crypto.name}
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.onerror = null
+              target.src =
+                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2366e0cc'/%3E%3Ctext x='12' y='14' fontFamily='Arial' fontSize='8' fill='%23132c4c' textAnchor='middle'%3E${crypto.name.charAt(0)}%3C/text%3E%3C/svg%3E"
+            }}
+          />
         </div>
+        <span className="font-bold text-white whitespace-nowrap">{crypto.name}</span>
+        <span className="text-[#66e0cc] whitespace-nowrap font-medium">{crypto.symbol}</span>
+        <span className="text-white whitespace-nowrap">{crypto.price}</span>
+        <span className={`whitespace-nowrap ${crypto.isPositive ? "text-green-400" : "text-red-400"}`}>
+          {crypto.change}
+        </span>
       </div>
-    ))
+    </div>
+  ))
 
   return (
     <div className="bg-transparent border border-[#66e0cc] w-full max-w-full mx-auto overflow-hidden py-3 rounded-lg">

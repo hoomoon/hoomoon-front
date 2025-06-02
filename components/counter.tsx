@@ -1,57 +1,79 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
-import { useInView } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 
 interface CounterProps {
   value: string
+  duration?: number
 }
 
-export default function Counter({ value }: CounterProps) {
+export default function Counter({ value, duration = 2000 }: CounterProps) {
   const [displayValue, setDisplayValue] = useState("0")
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    if (!isInView) return
+    setIsMounted(true)
+  }, [])
 
-    // If the value is not numeric, just display it directly
-    if (isNaN(Number.parseInt(value.replace(/[^0-9]/g, "")))) {
-      setDisplayValue(value)
-      return
-    }
+  useEffect(() => {
+    if (!isMounted) return
 
-    // Extract numeric part and suffix
-    const numericMatch = value.match(/^([0-9,]+)(\+?)(.*)$/)
+    // Check if the value contains numbers to animate
+    const numericMatch = value.match(/[\d,]+/)
     if (!numericMatch) {
+      // If no numbers found, just display the value as is
       setDisplayValue(value)
       return
     }
 
-    const numericPart = numericMatch[1].replace(/,/g, "")
-    const hasPlusSign = numericMatch[2] === "+"
-    const suffix = numericMatch[3]
+    const numericPart = numericMatch[0].replace(/,/g, "")
+    const targetNumber = Number.parseInt(numericPart, 10)
 
-    const targetNumber = Number.parseInt(numericPart)
-    const duration = 2000 // ms
-    const steps = 20
-    const stepValue = targetNumber / steps
+    if (isNaN(targetNumber)) {
+      setDisplayValue(value)
+      return
+    }
 
-    let current = 0
-    const timer = setInterval(() => {
-      current += stepValue
-      if (current >= targetNumber) {
-        current = targetNumber
-        clearInterval(timer)
+    const startTime = Date.now()
+    const startValue = 0
+
+    const animate = () => {
+      const now = Date.now()
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+      const currentNumber = Math.floor(startValue + (targetNumber - startValue) * easeOutQuart)
+
+      // Format the number with commas if the original had them
+      const formattedNumber = value.includes(",") ? currentNumber.toLocaleString() : currentNumber.toString()
+
+      // Replace the numeric part in the original value
+      const newDisplayValue = value.replace(/[\d,]+/, formattedNumber)
+      setDisplayValue(newDisplayValue)
+
+      if (progress < 1) {
+        requestAnimationFrame(animate)
       }
+    }
 
-      // Format the number with commas
-      const formattedNumber = Math.floor(current).toLocaleString()
-      setDisplayValue(`${formattedNumber}${hasPlusSign ? "+" : ""}${suffix}`)
-    }, duration / steps)
+    const animationFrame = requestAnimationFrame(animate)
 
-    return () => clearInterval(timer)
-  }, [isInView, value])
+    return () => {
+      cancelAnimationFrame(animationFrame)
+    }
+  }, [value, duration, isMounted])
 
-  return <span ref={ref}>{displayValue}</span>
+  // Don't render anything until mounted
+  if (!isMounted) {
+    return null
+  }
+
+  return (
+    <motion.span initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
+      {displayValue}
+    </motion.span>
+  )
 }

@@ -12,22 +12,28 @@ import Counter from "@/components/counter"
 
 export default function LandingPage() {
   const [isLoading, setIsLoading] = useState(true)
-  const containerRef = useRef(null)
+  const [isMounted, setIsMounted] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Only initialize useScroll when mounted and ref is available
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   })
 
-  // Parallax effect values
+  // Parallax effect values - only use when mounted
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 300])
   const y2 = useTransform(scrollYProgress, [0, 1], [0, -300])
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0])
 
   useEffect(() => {
-    // Simulate loading
+    // Set mounted state first
+    setIsMounted(true)
+
+    // Simulate loading with a shorter delay to reduce SSR issues
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 2000)
+    }, 1500)
 
     return () => clearTimeout(timer)
   }, [])
@@ -50,37 +56,50 @@ export default function LandingPage() {
     { month: "Maio", value: "$1,14", status: "futuro" },
   ]
 
+  // Show a simple loading state during SSR and initial mount
+  if (!isMounted) {
+    return (
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <div className="text-white text-2xl font-bold">
+          HOO<span className="text-[#66e0cc]">MOON</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
-      {/* Preloader institucional */}
+      {/* Preloader */}
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-white"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* fundo pulsante */}
           <motion.div
-            className="absolute inset-0 bg-white"
-            animate={{ opacity: [1, 0.8, 1], scale: [1, 1.02, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          <motion.div
-           className="relative flex flex-col items-center"
-           initial={{ scale: 0.8, opacity: 0 }}
-           animate={{ scale: 1, opacity: 1 }}
-           transition={{ duration: 0.6, delay: 0.2 }}
-         >
-           {/* Spinner circular */}
-           <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-300 border-t-[#66e0cc] mb-4"></div>
-           <p className="text-gray-800 font-medium text-lg text-center">
-             Carregando sua conexão com a Hoomoon...
-           </p>
-         </motion.div>
+            className="flex flex-col items-center"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="w-32 h-32 relative mb-8 flex items-center justify-center">
+              <div className="text-4xl font-bold text-white">
+                HOO<span className="text-[#66e0cc]">MOON</span>
+              </div>
+            </div>
+            <div className="h-1 w-48 bg-zinc-800 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-[#66e0cc] to-purple-600"
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+              ></motion.div>
+            </div>
+          </motion.div>
         </motion.div>
       )}
+
       <div ref={containerRef} className="bg-black min-h-screen font-urbanist text-white overflow-hidden">
         {/* Particles Background */}
         <div className="fixed inset-0 z-0">
@@ -92,7 +111,7 @@ export default function LandingPage() {
           className="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-zinc-800/50"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 2.2 }}
+          transition={{ duration: 0.5, delay: 1.7 }}
         >
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             {/* Logo  frase institucional */}
@@ -153,21 +172,21 @@ export default function LandingPage() {
               className="max-w-3xl"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 2.5 }}
+              transition={{ duration: 0.8, delay: 2 }}
             >
               <motion.div
                 className="inline-block bg-[#66e0cc]/10 border border-[#66e0cc]/20 rounded-full px-4 py-1 text-[#66e0cc] text-sm font-medium mb-6"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 2.7 }}
+                transition={{ duration: 0.5, delay: 2.2 }}
               >
                 Fundo de investimento cripto
               </motion.div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                 <TypewriterEffect
-                  text={`Nãão criamos uma moeda. Criamos um caminho direto até a valorização dela`}
-                  delay={3000}
+                  text="Naão criamos uma moeda. Criamos um caminho direto até a valorização dela"
+                  delay={2500}
                 />
               </h1>
 
@@ -175,7 +194,7 @@ export default function LandingPage() {
                 className="text-gray-400 text-lg mb-8 max-w-lg"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 5 }}
+                transition={{ duration: 0.8, delay: 4.5 }}
               >
                 O acesso antecipado à próxima revolução em distribuição de valor cripto.
               </motion.p>
@@ -184,7 +203,7 @@ export default function LandingPage() {
                 className="flex flex-col sm:flex-row gap-4 mb-12"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 5.2 }}
+                transition={{ duration: 0.5, delay: 4.7 }}
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
@@ -215,7 +234,7 @@ export default function LandingPage() {
                 className="bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-xl p-6"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 5.5 }}
+                transition={{ duration: 0.5, delay: 5 }}
               >
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-2 h-2 rounded-full bg-[#66e0cc]"></div>
@@ -228,7 +247,7 @@ export default function LandingPage() {
                     className="h-full bg-gradient-to-r from-[#66e0cc] to-[#66e0cc]/70 rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: "30%" }}
-                    transition={{ duration: 1, delay: 6 }}
+                    transition={{ duration: 1, delay: 5.5 }}
                   ></motion.div>
                 </div>
                 <p className="text-xs text-gray-500 text-center">Movido por tecnologia. Sustentado por fatos.</p>
@@ -241,7 +260,7 @@ export default function LandingPage() {
             className="absolute bottom-10 left-1/2 -translate-x-1/2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 6.5 }}
+            transition={{ duration: 1, delay: 6 }}
           >
             <div className="flex flex-col items-center">
               <p className="text-xs text-gray-500 mb-2">Scroll para descobrir</p>
@@ -355,7 +374,6 @@ export default function LandingPage() {
           viewport={{ once: true }}
         >
           <motion.div className="absolute inset-0 z-0 opacity-20" style={{ y: y2 }}>
-            {/* Removendo a referência à imagem de fundo blockchain-grid */}
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black"></div>
           </motion.div>
 
@@ -604,7 +622,7 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
               {/* HOO FREE */}
               <motion.div
                 className="bg-zinc-900 rounded-xl p-6 border border-zinc-800"
@@ -634,6 +652,40 @@ export default function LandingPage() {
                 </button>
               </motion.div>
 
+              {/* HOO PANDORA */}
+              <motion.div
+                className="bg-zinc-900 rounded-xl p-6 border border-zinc-800"
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(34, 197, 94, 0.2)" }}
+              >
+                <div className="text-2xl font-bold mb-2" style={{ color: "#22c55e" }}>
+                  🌙 HOO PANDORA
+                </div>
+                <ul className="space-y-2 mb-6">
+                  <li className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>US$5 por 60 dias</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>120% de retorno (2,00% ao dia)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span>Saques diários</span>
+                  </li>
+                </ul>
+                <button
+                  className="w-full text-black font-bold py-3 rounded-lg transition-colors"
+                  style={{ backgroundColor: "#22c55e" }}
+                >
+                  Investir Agora
+                </button>
+              </motion.div>
+
               {/* HOO TITAN */}
               <motion.div
                 className="bg-zinc-900 rounded-xl p-6 border border-zinc-800"
@@ -647,11 +699,11 @@ export default function LandingPage() {
                 <ul className="space-y-2 mb-6">
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>US$5 por 40 dias</span>
+                    <span>US$10 por 40 dias</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>130% de retorno (3,25% ao dia)</span>
+                    <span>140% de retorno (3,25% ao dia)</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
@@ -668,7 +720,7 @@ export default function LandingPage() {
                 className="bg-zinc-900 rounded-xl p-6 border border-[#66e0cc]/30"
                 initial={{ y: 30, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.25 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(102, 224, 204, 0.3)" }}
               >
@@ -679,7 +731,7 @@ export default function LandingPage() {
                 <ul className="space-y-2 mb-6">
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>US$10 por 40 dias</span>
+                    <span>US$20 por 40 dias</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
@@ -829,8 +881,8 @@ export default function LandingPage() {
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
               >
-                <div className="w-8 h-8 relative mr-2">
-                  <Image src="/images/hoomoon-logo.png" alt="HOOMOON Logo" layout="fill" objectFit="contain" />
+                <div className="w-8 h-8 flex items-center justify-center mr-2">
+                  <span className="text-[#66e0cc]">🌙</span>
                 </div>
                 HOO<span className="text-[#66e0cc]">MOON</span>
               </motion.div>
@@ -893,7 +945,7 @@ export default function LandingPage() {
                   ))}
                 </motion.div>
               </div>
-              <motion.p
+              <motion.div
                 className="text-center text-xs text-gray-500 mt-8"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -901,7 +953,7 @@ export default function LandingPage() {
                 viewport={{ once: true }}
               >
                 © {new Date().getFullYear()} HOOMOON. Todos os direitos reservados.
-              </motion.p>
+              </motion.div>
             </div>
           </div>
         </footer>

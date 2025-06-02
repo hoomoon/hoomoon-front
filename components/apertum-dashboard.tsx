@@ -1,8 +1,7 @@
-// component/apertum-dashboard.tsx
 "use client"
 
 import { useState, useEffect } from "react"
-import ApertumHorizontalTicker from "./apertum-horizontal-ticker"
+import CryptoTicker from "./crypto-ticker"
 
 export default function ApertumDashboard() {
   // Estados para armazenar dados da API e estado de carregamento
@@ -14,12 +13,12 @@ export default function ApertumDashboard() {
 
   // Dados mockados para fallback quando a API falha
   const mockStats = {
-    total_blocks: 0,
-    average_block_time: 0,
-    total_transactions: 0,
-    total_addresses: 0,
-    gas_price: 0,
-    daily_transaction_count: 0,
+    total_blocks: 939735,
+    average_block_time: 2.1,
+    total_transactions: 1041722,
+    total_addresses: 38729,
+    gas_price: 22,
+    daily_transaction_count: 18410,
   }
 
   const mockBlocks = [
@@ -141,7 +140,7 @@ export default function ApertumDashboard() {
       </div>
 
       {/* TICKER DE PREÇOS */}
-      <ApertumHorizontalTicker />
+      <CryptoTicker />
 
       {/* CARDS DE ESTATÍSTICAS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -203,12 +202,12 @@ export default function ApertumDashboard() {
         <div className="h-24 w-full">
           <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="w-full h-full">
             <path
-              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30 0,30 Z"
+              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30 100,30 L0,30 Z"
               fill="#66e0cc"
               opacity="0.3"
             />
             <path
-              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30 0,30 Z"
+              d="M0,20 C10,15 20,25 30,17 C40,8 50,20 60,16 C70,12 80,20 90,18 C100,16 100,30"
               stroke="#66e0cc"
               strokeWidth="2"
               fill="none"

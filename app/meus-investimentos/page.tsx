@@ -1,202 +1,345 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { ArrowLeft, DollarSign } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
-// Função para gerar código aleatório no formato HOO-XXXXXXX
-function gerarCodigo(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  let result = ""
-  for (let i = 0; i < 7; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return `HOO-${result}`
-}
+const investmentPlans = [
+  {
+    key: "FREE",
+    name: "HOO FREE",
+    logo: "/images/lua-free.png",
+    border: "border-cyan-400",
+    text: "text-cyan-400",
+    bg: "bg-cyan-400",
+    invested: "$0.00",
+    daily: "$0.00",
+    max: "$0.00",
+    start: "15/05/2025",
+    next: "18/05/2025",
+    end: "15/06/2025",
+    progress: 100,
+    code: "HOO-FREE001",
+    description: "Plano gratuito para novos usuários.",
+  },
+  {
+    key: "PANDORA",
+    name: "HOO PANDORA",
+    logo: "/images/lua-pandora.png",
+    border: "border-green-500",
+    text: "text-green-500",
+    bg: "bg-green-500",
+    invested: "$15.00",
+    daily: "$0.30",
+    max: "$18.00",
+    start: "15/05/2025",
+    next: "Diário",
+    end: "15/07/2025",
+    progress: 25,
+    code: "HOO-PAN84RT",
+    description: "Locação mínima $5, retorno total 120%",
+    withdrawalDays: "Diário",
+  },
+  {
+    key: "TITAN",
+    name: "HOO TITAN",
+    logo: "/images/lua-titan.png",
+    border: "border-purple-500",
+    text: "text-purple-500",
+    bg: "bg-purple-500",
+    invested: "$20.00",
+    daily: "$0.80",
+    max: "$32.00",
+    start: "15/05/2025",
+    next: "18/05/2025",
+    end: "15/06/2025",
+    progress: 50,
+    code: "HOO-WQR75KW",
+    description: "Locação mínima $10, retorno total 140%",
+  },
+  {
+    key: "CALLISTO",
+    name: "HOO CALLISTO",
+    logo: "/images/lua-callisto.png",
+    border: "border-red-500",
+    text: "text-red-500",
+    bg: "bg-red-500",
+    invested: "$10.00",
+    daily: "$0.80",
+    max: "$32.00",
+    start: "15/05/2025",
+    next: "18/05/2025",
+    end: "15/06/2025",
+    progress: 75,
+    code: "HOO-CAL93RT",
+    description: "Locação mínima $20, retorno total 160%",
+  },
+]
 
-// Função para formatar tempo no formato HH:MM:SS
-function formatarTempo(segundos: number): string {
-  const h = String(Math.floor(segundos / 3600)).padStart(2, "0")
-  const m = String(Math.floor((segundos % 3600) / 60)).padStart(2, "0")
-  const s = String(segundos % 60).padStart(2, "0")
-  return `${h}:${m}:${s}`
-}
+export default function MeusInvestimentosPage() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const timerRef = useRef<NodeJS.Timeout>()
+  const countdownRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({})
 
-// Interface para o tipo de investimento
-interface Investimento {
-  plano: string
-  descricao: string
-  valor: number
-  codigo: string
-  rendimentoDiario: number
-  rendimentoMaximo: number
-  frequenciaSaques: number
-  dataAtivacao: string
-  proximaLiberacao: string
-  dataExpiracao: string
-  tempoRestante: number
-  progresso: number
-}
-
-export default function MeusInvestimentos() {
-  // Estado para armazenar os investimentos
-  const [investimentos, setInvestimentos] = useState<Investimento[]>([
-    {
-      plano: "DOGE FLASH",
-      descricao: "Ideal para iniciantes com investimento mínimo.",
-      valor: 20.0,
-      codigo: gerarCodigo(),
-      rendimentoDiario: 0.8,
-      rendimentoMaximo: 32.0,
-      frequenciaSaques: 3,
-      dataAtivacao: "15/05/2025",
-      proximaLiberacao: "18/05/2025",
-      dataExpiracao: "15/06/2025",
-      tempoRestante: 7260, // 2 horas, 1 minuto e 0 segundos
-      progresso: 25,
-    },
-    {
-      plano: "BTC BOOST",
-      descricao: "Rendimentos acelerados para investidores experientes.",
-      valor: 100.0,
-      codigo: gerarCodigo(),
-      rendimentoDiario: 4.5,
-      rendimentoMaximo: 180.0,
-      frequenciaSaques: 2,
-      dataAtivacao: "10/05/2025",
-      proximaLiberacao: "16/05/2025",
-      dataExpiracao: "10/06/2025",
-      tempoRestante: 3600, // 1 hora
-      progresso: 40,
-    },
-    {
-      plano: "ETH PREMIUM",
-      descricao: "Máximo rendimento para investimentos de longo prazo.",
-      valor: 500.0,
-      codigo: gerarCodigo(),
-      rendimentoDiario: 25.0,
-      rendimentoMaximo: 1000.0,
-      frequenciaSaques: 5,
-      dataAtivacao: "01/05/2025",
-      proximaLiberacao: "20/05/2025",
-      dataExpiracao: "01/07/2025",
-      tempoRestante: 1800, // 30 minutos
-      progresso: 60,
-    },
-  ])
-
-  // Efeito para atualizar o tempo restante a cada segundo
+  // Efeito para inicializar a animação do canvas
   useEffect(() => {
-    const intervalo = setInterval(() => {
-      setInvestimentos((prev) => {
-        if (!prev) return []
-        return prev.map((inv) => ({
-          ...inv,
-          tempoRestante: inv.tempoRestante > 0 ? inv.tempoRestante - 1 : 0,
-        }))
-      })
-    }, 1000)
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    // Limpar o intervalo quando o componente for desmontado
-    return () => clearInterval(intervalo)
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    // Configurar o canvas para ocupar toda a tela
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    // Chamar resize inicialmente e adicionar listener para redimensionamento
+    resizeCanvas()
+    window.addEventListener("resize", resizeCanvas)
+
+    // Configurações da animação
+    const nodes: Node[] = []
+    const nodeCount = 100
+    const connectionDistance = 150
+
+    // Classe para representar um nó na teia
+    class Node {
+      x: number
+      y: number
+      vx: number
+      vy: number
+      radius: number
+
+      constructor() {
+        this.x = Math.random() * canvas.width
+        this.y = Math.random() * canvas.height
+        this.vx = (Math.random() - 0.5) * 0.5
+        this.vy = (Math.random() - 0.5) * 0.5
+        this.radius = Math.random() * 1.5 + 0.5
+      }
+
+      update() {
+        // Atualizar posição
+        this.x += this.vx
+        this.y += this.vy
+
+        // Rebater nas bordas
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1
+      }
+
+      draw() {
+        if (!ctx) return
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        ctx.fillStyle = "rgba(102, 224, 204, 0.5)"
+        ctx.fill()
+      }
+    }
+
+    // Criar nós
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push(new Node())
+    }
+
+    // Função de animação
+    const animate = () => {
+      if (!ctx || !canvas) return
+
+      // Limpar canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Atualizar e desenhar nós
+      nodes.forEach((node) => {
+        node.update()
+        node.draw()
+      })
+
+      // Desenhar conexões entre nós próximos
+      ctx.strokeStyle = "rgba(102, 224, 204, 0.15)"
+      ctx.lineWidth = 0.5
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x
+          const dy = nodes[i].y - nodes[j].y
+          const distance = Math.sqrt(dx * dx + dy * dy)
+
+          if (distance < connectionDistance) {
+            // Opacidade baseada na distância
+            const opacity = 1 - distance / connectionDistance
+            ctx.strokeStyle = `rgba(102, 224, 204, ${opacity * 0.2})`
+
+            ctx.beginPath()
+            ctx.moveTo(nodes[i].x, nodes[i].y)
+            ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.stroke()
+          }
+        }
+      }
+
+      requestAnimationFrame(animate)
+    }
+
+    // Iniciar animação
+    animate()
+
+    // Limpar ao desmontar
+    return () => {
+      window.removeEventListener("resize", resizeCanvas)
+      cancelAnimationFrame(0) // Apenas para garantir
+    }
+  }, [])
+
+  // Efeito para o contador regressivo
+  useEffect(() => {
+    // Definir a data alvo (2 horas a partir de agora)
+    const targetTime = new Date()
+    targetTime.setHours(targetTime.getHours() + 2)
+
+    const updateCountdown = () => {
+      const now = new Date()
+      const diff = targetTime.getTime() - now.getTime()
+
+      if (diff <= 0) {
+        Object.keys(countdownRefs.current).forEach((key) => {
+          const ref = countdownRefs.current[key]
+          if (ref) {
+            ref.textContent = "00:00:00"
+          }
+        })
+        clearInterval(timerRef.current)
+        return
+      }
+
+      // Calcular horas, minutos e segundos
+      const hours = Math.floor(diff / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+      // Formatar com zeros à esquerda
+      const formattedHours = hours.toString().padStart(2, "0")
+      const formattedMinutes = minutes.toString().padStart(2, "0")
+      const formattedSeconds = seconds.toString().padStart(2, "0")
+
+      // Atualizar o texto em todos os contadores
+      Object.keys(countdownRefs.current).forEach((key) => {
+        const ref = countdownRefs.current[key]
+        if (ref) {
+          ref.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+        }
+      })
+    }
+
+    // Atualizar imediatamente e depois a cada segundo
+    updateCountdown()
+    timerRef.current = setInterval(updateCountdown, 1000)
+
+    // Limpar ao desmontar
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    }
   }, [])
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 pb-20">
-      <div className="flex items-center mb-6">
-        <Link href="/" className="mr-3">
-          <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold">Meus Investimentos</h1>
-          <p className="text-sm text-gray-400">Acompanhe seus investimentos ativos</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#0e0f1c] to-[#0a0d16] relative overflow-hidden text-white">
+      {/* Fundo animado estilo teia */}
+      <div className="absolute inset-0 z-0">
+        <canvas ref={canvasRef} id="background-canvas" className="w-full h-full"></canvas>
       </div>
 
-      <div className="space-y-6">
-        {investimentos && investimentos.length > 0 ? (
-          investimentos.map((inv, index) => (
-            <div key={index} className="bg-[#111] rounded-xl p-5 border border-[#222]">
-              <div className="mb-4">
-                <h2 className="text-xl font-bold text-white">{inv.plano}</h2>
-                <p className="text-sm text-gray-400">{inv.descricao}</p>
-              </div>
+      <div className="relative z-10 p-4 md:p-10 max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Meus Investimentos</h1>
 
-              <div className="mb-4">
-                <div className="text-3xl font-bold text-white">${inv.valor.toFixed(2)}</div>
-                <div className="text-sm text-gray-400 mt-1">Código: {inv.codigo}</div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-4">
+        {/* Cards de investimento */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {investmentPlans.map((plan) => (
+            <div
+              key={plan.key}
+              className={`bg-black/60 backdrop-blur-sm rounded-2xl border ${plan.border} p-6 mb-8 shadow-lg shadow-${plan.text.split("-")[1]}-500/10`}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <img src={plan.logo || "/placeholder.svg"} alt={plan.name} className="w-16 h-16" />
                 <div>
-                  <div className="text-sm text-gray-400">Rendimento Diário</div>
-                  <div className="text-lg font-semibold text-white">${inv.rendimentoDiario.toFixed(2)}</div>
+                  <h2 className={`text-2xl font-semibold ${plan.text} mb-2`}>{plan.name}</h2>
+                  <p className="text-gray-400">{plan.description}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-6 mb-6">
+                <div>
+                  <p className="text-gray-300">Valor</p>
+                  <p className="text-xl font-bold">{plan.invested}</p>
+                  <p className="text-xs text-gray-400">Código: {plan.code}</p>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-400">Rendimento Máximo</div>
-                  <div className="text-lg font-semibold text-white">${inv.rendimentoMaximo.toFixed(2)}</div>
+                  <p className="text-gray-300">Rendimento Diário</p>
+                  <p className={`text-xl font-bold ${plan.text}`}>{plan.daily}</p>
+                </div>
+                <div>
+                  <p className="text-gray-300">Rendimento Máximo</p>
+                  <p className={`text-xl font-bold ${plan.text}`}>{plan.max}</p>
                 </div>
               </div>
 
-              <div className="mb-4">
-                <h3 className="text-md font-semibold mb-2">Detalhes do Investimento</h3>
-                <div className="bg-[#1a1a1a] rounded-lg p-3 space-y-2">
+              <div className="mb-6">
+                <h3 className="text-white font-semibold mb-2">Detalhes do Investimento</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-400">Frequência de Saques:</span>
-                    <span className="text-sm">A cada {inv.frequenciaSaques} dias</span>
+                    <span>Frequência de Saques:</span>
+                    <span className="text-white">A cada 3 dias</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-400">Data de Ativação:</span>
-                    <span className="text-sm">{inv.dataAtivacao}</span>
+                    <span>Data de Ativação:</span>
+                    <span className="text-white">{plan.start}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-400">Próxima Liberação:</span>
-                    <span className="text-sm">{inv.proximaLiberacao}</span>
+                    <span>Próxima Liberação:</span>
+                    <span className="text-white">{plan.next}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-400">Data de Expiração:</span>
-                    <span className="text-sm">{inv.dataExpiracao}</span>
+                    <span>Data de Expiração:</span>
+                    <span className="text-white">{plan.end}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#1a1a1a] rounded-lg p-4 mb-4 text-center">
-                <div className="text-sm text-gray-400 mb-2">Próximo Pagamento</div>
-                <div className="font-mono text-3xl font-bold text-[#66e0cc]">{formatarTempo(inv.tempoRestante)}</div>
+              <div className="text-center">
+                <p className="text-gray-300 mb-1">Próximo Pagamento</p>
+                <p ref={(el) => (countdownRefs.current[plan.key] = el)} className={`text-2xl font-mono ${plan.text}`}>
+                  02:00:00
+                </p>
               </div>
 
-              <div className="space-y-3 mb-4">
-                <Button className="w-full bg-[#66e0cc] hover:bg-[#50c4b0] text-black font-semibold">
-                  <DollarSign className="h-4 w-4 mr-2" /> Pagar agora
-                </Button>
-                <Button className="w-full bg-[#222] hover:bg-[#333] text-white">Pagar com Saldo</Button>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span>$0.00</span>
-                  <span>${inv.rendimentoMaximo.toFixed(2)}</span>
+              {/* Barra de progresso */}
+              <div className="mt-6">
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-400">Progresso</span>
+                  <span className="text-gray-400">{plan.progress}%</span>
                 </div>
-                <div className="h-4 bg-[#222] rounded-full overflow-hidden relative">
+                <div className="w-full bg-gray-800 rounded-full h-2.5">
                   <div
-                    className="h-full bg-[#66e0cc] transition-all duration-500 ease-in-out"
-                    style={{ width: `${inv.progresso}%` }}
+                    className={`${plan.bg} h-2.5 rounded-full transition-all duration-700 ease-in-out`}
+                    style={{ width: `${plan.progress}%` }}
                   ></div>
-                  <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold">
-                    {inv.progresso}%
-                  </div>
                 </div>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="bg-[#111] p-4 rounded-xl text-center">
-            <p className="text-gray-400">Nenhum investimento encontrado.</p>
-          </div>
-        )}
+          ))}
+        </div>
+
+        {/* Botão de voltar */}
+        <div className="mt-8">
+          <Link
+            href="/dashboard"
+            className="inline-block bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700 transition"
+          >
+            ← Voltar para o Início
+          </Link>
+        </div>
       </div>
     </div>
   )
