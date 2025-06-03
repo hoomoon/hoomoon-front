@@ -15,12 +15,13 @@ import {
   TrendingUp,
   Users,
   Gift,
-  Headset,
   Settings,
   BarChart2,
   X,
   Briefcase,
   Share2,
+  RefreshCcw,
+  HelpCircle
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -197,17 +198,18 @@ export default function BinanbotDashboard() {
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           <SidebarItem icon={<Home size={18} />} label="Início" active />
-          <SidebarItem icon={<DollarSign size={18} />} label="Fazer Depósito" href="/deposito" />
           <SidebarItem icon={<TrendingUp size={18} />} label="Investir" href="/investir" />
           <SidebarItem icon={<Briefcase size={18} />} label="Meus Investimentos" href="/meus-investimentos" />
           <SidebarItem icon={<Users size={18} />} label="Minha Rede" href="/minha-rede" />
-          <SidebarItem icon={<Users size={18} />} label="Programa de Afiliados" href="/afiliados" />
+          <SidebarItem icon={<Users size={18} />} label="Programa de Afiliados" href="/programa-afiliados" />
           <SidebarItem icon={<Gift size={18} />} label="Meus Ganhos" href="/meus-ganhos" />
           <SidebarItem icon={<Wallet size={18} />} label="Saque" href="/saque" />
-          <SidebarItem icon={<Headset size={18} />} label="Suporte" href="/suporte" />
+          <SidebarItem icon={<RefreshCcw size={18} />} label="Swap APTM" href="/swap" />
+          <SidebarItem icon={<HelpCircle size={18} />} label="Suporte" href="/suporte" />{" "}
+          {/* Substituído Headset por HelpCircle */}
           <SidebarItem icon={<Settings size={18} />} label="Configuração" href="/configuracao" />
           <SidebarItem icon={<Share2 size={18} />} label="Material de Marketing" href="/material-de-marketing" />
-          <SidebarItem icon={<BarChart2 size={18} />} label="Opções Binárias" />
+          <SidebarItem icon={<BarChart2 size={18} />} label="Plano de Carreira" href="/plano-de-carreira" />
           <SidebarItem icon={<User size={18} />} label="Perfil" href="/perfil" />
         </nav>
 
@@ -264,7 +266,7 @@ export default function BinanbotDashboard() {
               </Button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-transparent border border-[#66e0cc] rounded-md shadow-none p-2 z-50">
+                <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-black/95 border border-[#66e0cc] rounded-md shadow-lg shadow-black/50 p-2 z-50">
                   <div className="flex justify-between items-center mb-2 p-2">
                     <h3 className="font-medium text-white">Notificações</h3>
                     <Button variant="ghost" size="sm" onClick={() => setShowNotifications(false)}>
@@ -298,9 +300,9 @@ export default function BinanbotDashboard() {
               )}
             </div>
 
-            <Link href="/deposito">
+            <Link href="/investir">
               <Button className="bg-[#66e0cc] hover:bg-[#50c4b0] px-3 py-1 h-8 text-sm font-semibold text-black">
-                Depósito
+                Investir
               </Button>
             </Link>
 

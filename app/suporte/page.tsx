@@ -26,8 +26,8 @@ export default function Suporte() {
   // Lista de perguntas frequentes
   const faqItems = [
     {
-      question: "Como posso fazer um depósito?",
-      answer: 'Acesse a área "Fazer Depósito" no menu lateral, escolha o valor e siga as instruções exibidas na tela.',
+      question: "Como posso fazer um investimento?",
+      answer: 'Acesse a área "Investir" no menu lateral, escolha o valor e siga as instruções exibidas na tela.',
     },
     {
       question: "Quanto tempo leva para um saque ser processado?",

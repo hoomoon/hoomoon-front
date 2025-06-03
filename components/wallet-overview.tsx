@@ -7,7 +7,6 @@ import { useState, useEffect } from "react"
 import { ArrowUpRight, ArrowDownRight, Users, DollarSign, Gift, TrendingUp } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/app/providers/AuthProvider"
-import toast from "react-hot-toast"
 
 export default function WalletOverview() {
   const [copiado, setCopiado] = useState(false)
@@ -89,9 +88,9 @@ useEffect(() => {
         </div>
 
         <div className="flex justify-end">
-          <Link href="/deposito">
+          <Link href="/investir">
             <button className="bg-[#66e0cc] text-black font-semibold rounded-xl px-4 py-2 text-sm flex items-center gap-2">
-              + Novo Depósito
+              + Novo Investimento
             </button>
           </Link>
         </div>
