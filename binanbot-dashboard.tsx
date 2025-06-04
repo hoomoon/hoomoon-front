@@ -198,19 +198,18 @@ export default function BinanbotDashboard() {
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           <SidebarItem icon={<Home size={18} />} label="Início" active />
-          <SidebarItem icon={<TrendingUp size={18} />} label="Investir" href="/investir" />
-          <SidebarItem icon={<Briefcase size={18} />} label="Meus Investimentos" href="/meus-investimentos" />
+          {/* <SidebarItem icon={<TrendingUp size={18} />} label="Investir" href="/investir" /> */}
+          {/* <SidebarItem icon={<Briefcase size={18} />} label="Meus Investimentos" href="/meus-investimentos" /> */}
           <SidebarItem icon={<Users size={18} />} label="Minha Rede" href="/minha-rede" />
-          <SidebarItem icon={<Users size={18} />} label="Programa de Afiliados" href="/programa-afiliados" />
-          <SidebarItem icon={<Gift size={18} />} label="Meus Ganhos" href="/meus-ganhos" />
-          <SidebarItem icon={<Wallet size={18} />} label="Saque" href="/saque" />
-          <SidebarItem icon={<RefreshCcw size={18} />} label="Swap APTM" href="/swap" />
-          <SidebarItem icon={<HelpCircle size={18} />} label="Suporte" href="/suporte" />{" "}
-          {/* Substituído Headset por HelpCircle */}
-          <SidebarItem icon={<Settings size={18} />} label="Configuração" href="/configuracao" />
-          <SidebarItem icon={<Share2 size={18} />} label="Material de Marketing" href="/material-de-marketing" />
-          <SidebarItem icon={<BarChart2 size={18} />} label="Plano de Carreira" href="/plano-de-carreira" />
-          <SidebarItem icon={<User size={18} />} label="Perfil" href="/perfil" />
+          {/* <SidebarItem icon={<Users size={18} />} label="Programa de Afiliados" href="/programa-afiliados" /> */}
+          {/* <SidebarItem icon={<Gift size={18} />} label="Meus Ganhos" href="/meus-ganhos" /> */}
+          {/* <SidebarItem icon={<Wallet size={18} />} label="Saque" href="/saque" /> */}
+          {/* <SidebarItem icon={<RefreshCcw size={18} />} label="Swap APTM" href="/swap" /> */}
+          {/* <SidebarItem icon={<HelpCircle size={18} />} label="Suporte" href="/suporte" /> */}
+          {/* <SidebarItem icon={<Settings size={18} />} label="Configuração" href="/configuracao" /> */}
+          {/* <SidebarItem icon={<Share2 size={18} />} label="Material de Marketing" href="/material-de-marketing" /> */}
+          {/* <SidebarItem icon={<BarChart2 size={18} />} label="Plano de Carreira" href="/plano-de-carreira" /> */}
+          {/* <SidebarItem icon={<User size={18} />} label="Perfil" href="/perfil" /> */}
         </nav>
 
         <div className="p-4 border-t border-[#66e0cc]/50 mt-auto">
@@ -275,21 +274,21 @@ export default function BinanbotDashboard() {
                   </div>
                   <div className="max-h-[300px] overflow-y-auto">
                     <NotificationItem
-                      title="Depósito confirmado"
-                      message="Seu depósito de 500 USDT foi confirmado"
+                      title="Nova mensagem"
+                      message="Você recebeu uma nova mensagem"
                       time="Agora mesmo"
                       isNew
                     />
                     <NotificationItem
-                      title="Novo airdrop disponível"
-                      message="BNBC-A airdrop está disponível para reivindicar"
+                      title="Notificações"
+                      message="Quando recebê-las, você será notificado"
                       time="2 horas atrás"
                       isNew
                     />
                     <NotificationItem
-                      title="Alerta de preço"
-                      message="BTC atingiu seu preço alvo de $70,000"
-                      time="5 horas atrás"
+                      title="Novo usuário"
+                      message="Seja bem-vindo ao HOOMOON"
+                      time="Agora mesmo"
                       isNew
                     />
                   </div>
@@ -300,11 +299,11 @@ export default function BinanbotDashboard() {
               )}
             </div>
 
-            <Link href="/investir">
+            {/* <Link href="/investir">
               <Button className="bg-[#66e0cc] hover:bg-[#50c4b0] px-3 py-1 h-8 text-sm font-semibold text-black">
                 Investir
               </Button>
-            </Link>
+            </Link> */}
 
             {/* REMOVED MONETARY VALUE */}
 
@@ -315,11 +314,11 @@ export default function BinanbotDashboard() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-transparent border border-[#66e0cc] text-white">
-                <Link href="/perfil" passHref>
+                {/* <Link href="/perfil" passHref>
                   <DropdownMenuItem className="hover:bg-[#66e0cc]/10 text-white cursor-pointer">
                     <User size={16} className="mr-2" /> Perfil
                   </DropdownMenuItem>
-                </Link>
+                </Link> */}
                 <DropdownMenuItem className="text-red-500 hover:bg-[#66e0cc]/10" onClick={handleLogout}>
                   <LogOut size={16} className="mr-2" /> Sair
                 </DropdownMenuItem>

@@ -32,12 +32,19 @@ export default function RootLayout({
           <Toaster
             position="top-center"
             toastOptions={{
-              // auto-close depois de 3s
-              duration: 3000,
-              // estilo verde
-              style: {
-                background: '#4CAF50',
-                color: '#ffffff',
+              success: {
+                duration: 5000,
+                style: {
+                  background: '#4CAF50',
+                  color: '#ffffff',
+                },
+              },
+              error: {
+                duration: 5000,
+                style: {
+                  background: '#F44336',
+                  color: '#ffffff',
+                },
               },
             }}
           />  

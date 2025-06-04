@@ -2,6 +2,7 @@
 "use client"
 
 import type React from "react"
+import { useCallback } from "react"
 
 import { useState, useEffect, useRef } from "react"
 import { Input } from "@/components/ui/input"
@@ -12,7 +13,8 @@ import Link from "next/link"
 import ParticlesBackground from "@/components/particles-background"
 import { useRouter } from 'next/navigation'
 import { register } from '@/lib/auth'
-import { AxiosError } from "axios"
+import axios, { AxiosError } from "axios"
+import { toast } from 'react-hot-toast'
 
 export default function Cadastro() {
   // Estados para os campos do formulário
@@ -58,6 +60,92 @@ export default function Cadastro() {
   ]
 
   const paisSelecionado = paises.find((p) => p.nome === pais)
+
+  const [emailChecking, setEmailChecking] = useState(false)
+  const [emailExists, setEmailExists] = useState(false)
+  const [cpfChecking, setCpfChecking] = useState(false)
+  const [cpfExists, setCpfExists] = useState(false)
+
+  // Função para verificar e-mail no backend
+  const checkEmailExists = useCallback(async (emailToCheck: string) => {
+    if (!emailToCheck || !/\S+@\S+\.\S+/.test(emailToCheck)) return
+    
+    setEmailChecking(true)
+    try {
+      const response = await fetch(`${base}/api/check-email/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailToCheck })
+      })
+      const data = await response.json()
+      setEmailExists(data.exists)
+      if (data.exists) {
+        setErrors(prev => ({ ...prev, email: 'Este e-mail já está cadastrado' }))
+      } else {
+        setErrors(prev => {
+          const newErrors = { ...prev }
+          delete newErrors.email
+          return newErrors
+        })
+      }
+    } catch (error) {
+      console.error('Erro ao verificar e-mail:', error)
+    } finally {
+      setEmailChecking(false)
+    }
+  }, [base])
+
+  // Função para verificar CPF no backend
+  const checkCpfExists = useCallback(async (cpfToCheck: string) => {
+    const cpfNumbers = cpfToCheck.replace(/\D/g, '')
+    if (!cpfNumbers || cpfNumbers.length !== 11) return
+    
+    setCpfChecking(true)
+    try {
+      const response = await fetch(`${base}/api/check-cpf/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cpf: cpfNumbers })
+      })
+      const data = await response.json()
+      setCpfExists(data.exists)
+      if (data.exists) {
+        setErrors(prev => ({ ...prev, cpf: 'Este CPF já está cadastrado' }))
+      } else {
+        setErrors(prev => {
+          const newErrors = { ...prev }
+          delete newErrors.cpf
+          return newErrors
+        })
+      }
+    } catch (error) {
+      console.error('Erro ao verificar CPF:', error)
+    } finally {
+      setCpfChecking(false)
+    }
+  }, [base])
+
+  // useEffect para verificar e-mail com debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (email && email.includes('@')) {
+        checkEmailExists(email)
+      }
+    }, 500) // 500ms de debounce
+
+    return () => clearTimeout(timer)
+  }, [email, checkEmailExists])
+
+  // useEffect para verificar CPF com debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (cpf && cpf.replace(/\D/g, '').length === 11) {
+        checkCpfExists(cpf)
+      }
+    }, 500) // 500ms de debounce
+
+    return () => clearTimeout(timer)
+  }, [cpf, checkCpfExists])
 
   // Verificar se o componente está montado
   useEffect(() => {
@@ -213,6 +301,7 @@ export default function Cadastro() {
 
     if (!email.trim()) novosErros.email = "E-mail é obrigatório"
     else if (!/\S+@\S+\.\S+/.test(email)) novosErros.email = "E-mail inválido"
+    else if (emailExists) novosErros.email = "Este e-mail já está cadastrado"
 
     if (!telefone.trim()) novosErros.telefone = "Telefone é obrigatório"
 
@@ -220,11 +309,17 @@ export default function Cadastro() {
 
     if (isBrasil && !cpf.trim()) novosErros.cpf = "CPF é obrigatório para números brasileiros"
     else if (isBrasil && cpf.trim() && cpf.replace(/\D/g, "").length !== 11) novosErros.cpf = "CPF deve ter 11 dígitos"
+    else if (isBrasil && cpfExists) novosErros.cpf = "Este CPF já está cadastrado"
 
     if (!senha) novosErros.senha = "Senha é obrigatória"
     else if (senha.length < 8) novosErros.senha = "A senha deve ter pelo menos 8 caracteres"
 
     if (senha !== confirmarSenha) novosErros.confirmarSenha = "As senhas não coincidem"
+
+    // Validar sponsor code se preenchido
+    if (ref && sponsorChecked && !sponsorName) {
+      novosErros.sponsor_code = "Código de indicação inválido"
+    }
 
     setErrors(novosErros)
     return Object.keys(novosErros).length === 0
@@ -272,34 +367,63 @@ export default function Cadastro() {
       sponsor_code: ref || undefined,
     })
     // on success, backend sets HTTP-Only cookies
+    toast.success('Cadastro realizado com sucesso!')
     router.push('/dashboard')
   } catch (err: any) {
-      let parsedErrors: Record<string, string[]> | null = null
-      if ((err as AxiosError).isAxiosError) {
-        parsedErrors = (err as AxiosError).response?.data as Record<string,string[]> || null
-      } else {
-        try {
-          const msgData = JSON.parse(err.message)
-          if (msgData && typeof msgData === 'object') parsedErrors = msgData
-        } catch {}
+    let parsedErrors: Record<string, string[]> | null = null
+    if ((err as AxiosError).isAxiosError) {
+      const axiosError = err as AxiosError
+      parsedErrors = axiosError.response?.data as Record<string,string[]> || null
+      
+      // Tratamento específico para erro de sponsor_code
+      if (axiosError.response?.status === 400 && parsedErrors?.sponsor_code) {
+        toast.error('Código de indicação inválido. Verifique e tente novamente ou deixe em branco.')
+        setErrors({ sponsor_code: 'Código de indicação inválido' })
+        
+        // Foca no campo de sponsor code para facilitar correção
+        const sponsorInput = document.querySelector('input[placeholder*="Código de Indicação"]') as HTMLInputElement
+        if (sponsorInput) {
+          sponsorInput.focus()
+          sponsorInput.select()
+        }
+        
+        setIsSubmitting(false)
+        return
       }
-
-      if (parsedErrors) {
-        const fieldErrors: Record<string,string> = {}
-        Object.entries(parsedErrors).forEach(([field, msgs]) => {
-          const text = Array.isArray(msgs) ? msgs.join(' ') : String(msgs)
-          fieldErrors[field] =
-            field === 'email' && text.includes('already exists')
-              ? 'Já existe um usuário com este e-mail.'
-              : text
-        })
-        setErrors(fieldErrors)
-      } else {
-        setErrors({ form: err.message || 'Erro inesperado. Tente novamente.' })
-      }
-    } finally {
-      setIsSubmitting(false)
+    } else {
+      try {
+        const msgData = JSON.parse(err.message)
+        if (msgData && typeof msgData === 'object') parsedErrors = msgData
+      } catch {}
     }
+
+    if (parsedErrors) {
+      const fieldErrors: Record<string,string> = {}
+      Object.entries(parsedErrors).forEach(([field, msgs]) => {
+        const text = Array.isArray(msgs) ? msgs.join(' ') : String(msgs)
+        
+        // Mensagens de erro customizadas
+        if (field === 'email' && text.includes('already exists')) {
+          fieldErrors[field] = 'Já existe um usuário com este e-mail.'
+          toast.error('Este e-mail já está cadastrado.')
+        } else if (field === 'cpf' && text.includes('já está em uso')) {
+          fieldErrors[field] = 'Este CPF já está cadastrado.'
+          toast.error('Este CPF já está cadastrado.')
+        } else if (field === 'sponsor_code') {
+          fieldErrors[field] = 'Código de indicação inválido'
+          toast.error('Código de indicação inválido. Verifique e tente novamente.')
+        } else {
+          fieldErrors[field] = text
+        }
+      })
+      setErrors(fieldErrors)
+    } else {
+      toast.error('Erro inesperado. Tente novamente.')
+      setErrors({ form: err.message || 'Erro inesperado. Tente novamente.' })
+    }
+  } finally {
+    setIsSubmitting(false)
+  }
 }
 
   // Manipuladores de eventos seguros
@@ -367,9 +491,9 @@ export default function Cadastro() {
 
         <h2 className="text-2xl font-bold text-center">Criar sua conta</h2>
 
-        {errors.form && (
+        {/* {errors.form && (
           <div className="bg-red-50 text-red-700 p-3 rounded-xl border border-red-200">{errors.form}</div>
-        )}
+        )} */}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
@@ -392,24 +516,51 @@ export default function Cadastro() {
             {errors.nome && <p className="text-xs text-red-500 mt-1">{errors.nome}</p>}
           </div>
 
+          {/* Campo de E-mail melhorado */}
           <div className="space-y-1">
             <div className="relative">
               <Input
                 type="email"
                 placeholder="E-mail"
                 value={email}
-                onChange={(e) => e && e.target && setEmail(e.target.value)}
-                className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
-                  errors.email ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
+                onChange={(e) => {
+                  if (e && e.target) {
+                    setEmail(e.target.value)
+                    setEmailExists(false)
+                  }
+                }}
+                className={`bg-transparent border text-white pr-10 ${
+                  errors.email || emailExists
+                    ? "border-red-400 focus:border-red-400" 
+                    : email && !emailChecking && !emailExists && /\S+@\S+\.\S+/.test(email)
+                    ? "border-green-400 focus:border-green-400"
+                    : "border-[#66e0cc] focus:border-[#66e0cc]"
                 }`}
               />
-              {errors.email ? (
-                <AlertCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-500 h-5 w-5" />
-              ) : email ? (
-                <Check className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
-              ) : null}
+              {/* Ícone de status */}
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                {emailChecking ? (
+                  <div className="w-4 h-4 border-2 border-[#66e0cc] border-t-transparent rounded-full animate-spin" />
+                ) : errors.email || emailExists ? (
+                  <AlertCircle className="h-5 w-5 text-red-500" />
+                ) : email && /\S+@\S+\.\S+/.test(email) ? (
+                  <Check className="h-5 w-5 text-green-500" />
+                ) : null}
+              </div>
             </div>
-            {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+            {/* Mensagens de erro e feedback */}
+            {emailExists && (
+              <p className="text-xs text-red-500 mt-1 flex items-center">
+                <AlertCircle className="h-3 w-3 mr-1" />
+                Este e-mail já está cadastrado. 
+                <Link href="/login" className="ml-1 text-[#66e0cc] hover:underline">
+                  Fazer login?
+                </Link>
+              </p>
+            )}
+            {errors.email && !emailExists && (
+              <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+            )}
           </div>
 
           <div className="space-y-1">
@@ -499,6 +650,7 @@ export default function Cadastro() {
             {errors.telefone && <p className="text-xs text-red-500 mt-1">{errors.telefone}</p>}
           </div>
 
+          {/* Campo de CPF melhorado (dentro do bloco condicional isBrasil) */}
           {isBrasil && (
             <div className="space-y-1 animate-in fade-in slide-in-from-top duration-300">
               <div className="relative">
@@ -506,18 +658,44 @@ export default function Cadastro() {
                   type="text"
                   placeholder="CPF"
                   value={cpf}
-                  onChange={handleCpfChange}
-                  className={`bg-transparent border border-[#66e0cc] text-white pr-10 ${
-                    errors.cpf ? "border-red-400 focus:border-red-400" : "focus:border-[#66e0cc]"
+                  onChange={(e) => {
+                    if (e && e.target) {
+                      setCpf(formatarCPF(e.target.value))
+                      setCpfExists(false)
+                    }
+                  }}
+                  className={`bg-transparent border text-white pr-10 ${
+                    errors.cpf || cpfExists
+                      ? "border-red-400 focus:border-red-400" 
+                      : cpf && !cpfChecking && !cpfExists && cpf.replace(/\D/g, '').length === 11
+                      ? "border-green-400 focus:border-green-400"
+                      : "border-[#66e0cc] focus:border-[#66e0cc]"
                   }`}
                 />
-                {errors.cpf ? (
-                  <AlertCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-500 h-5 w-5" />
-                ) : cpf ? (
-                  <Check className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
-                ) : null}
+                {/* Ícone de status */}
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  {cpfChecking ? (
+                    <div className="w-4 h-4 border-2 border-[#66e0cc] border-t-transparent rounded-full animate-spin" />
+                  ) : errors.cpf || cpfExists ? (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  ) : cpf && cpf.replace(/\D/g, '').length === 11 ? (
+                    <Check className="h-5 w-5 text-green-500" />
+                  ) : null}
+                </div>
               </div>
-              {errors.cpf && <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>}
+              {/* Mensagens de erro e feedback */}
+              {cpfExists && (
+                <p className="text-xs text-red-500 mt-1 flex items-center">
+                  <AlertCircle className="h-3 w-3 mr-1" />
+                  Este CPF já está cadastrado. 
+                  <Link href="/login" className="ml-1 text-[#66e0cc] hover:underline">
+                    Fazer login?
+                  </Link>
+                </p>
+              )}
+              {errors.cpf && !cpfExists && (
+                <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>
+              )}
             </div>
           )}
 
@@ -597,21 +775,61 @@ export default function Cadastro() {
 
           {/* Código de Indicação */}
           <div className="space-y-1">
-            <Input
-              type="text"
-              placeholder="Código de Indicação (opcional)"
-              value={ref}
-              onChange={e => {
-                const v = e.target.value.toUpperCase()
-                setRef(v)
-                setSponsorChecked(false)
-              }}
-              disabled={!!searchParams.get("ref")}
-              className="bg-transparent border border-[#66e0cc] text-white"
-            />
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="Código de Indicação (opcional)"
+                value={ref}
+                onChange={e => {
+                  const v = e.target.value.toUpperCase()
+                  setRef(v)
+                  setSponsorChecked(false)
+                  // Limpa erro ao digitar
+                  if (errors.sponsor_code) {
+                    setErrors(prev => ({ ...prev, sponsor_code: '' }))
+                  }
+                }}
+                disabled={!!searchParams.get("ref")}
+                className={`bg-transparent border text-white pr-10 ${
+                  errors.sponsor_code 
+                    ? "border-red-400 focus:border-red-400" 
+                    : sponsorChecked && ref && sponsorName
+                      ? "border-green-400"
+                      : "border-[#66e0cc] focus:border-[#66e0cc]"
+                }`}
+              />
+              {/* Ícone de status */}
+              {ref && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  {!sponsorChecked ? (
+                    <div className="w-4 h-4 border-2 border-[#66e0cc] border-t-transparent rounded-full animate-spin" />
+                  ) : sponsorName ? (
+                    <Check className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                  )}
+                </div>
+              )}
+            </div>
+            
+            {/* Mensagem de erro */}
             {errors.sponsor_code && (
               <p className="text-xs text-red-500 mt-1">
                 {errors.sponsor_code}
+              </p>
+            )}
+            
+            {/* Mensagem informativa */}
+            {ref && sponsorChecked && !sponsorName && !errors.sponsor_code && (
+              <p className="text-xs text-amber-500 mt-1">
+                Código não encontrado. Você pode deixar em branco ou verificar o código.
+              </p>
+            )}
+            
+            {/* Mostrar nome do patrocinador se válido */}
+            {sponsorName && (
+              <p className="text-xs text-green-500 mt-1">
+                Indicado por: {sponsorName}
               </p>
             )}
           </div>
