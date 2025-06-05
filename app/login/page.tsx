@@ -71,14 +71,14 @@ export default function LoginPage() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm mb-1">E-mail</label>
+          <label htmlFor="email" className="block text-sm mb-1">Nome de usuário</label>
           <input
             id="email"
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            placeholder="seunome@exemplo.com"
+            placeholder="Ex: joao.silva"
             className="w-full bg-transparent border border-[#66e0cc] rounded-md py-2 px-3"
           />
         </div>
