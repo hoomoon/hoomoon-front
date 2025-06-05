@@ -4,8 +4,9 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios'
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'
 
 export interface RegisterPayload {
+  username: string
   name: string
-  email: string
+  email?: string
   phone: string
   country: string
   cpf?: string
@@ -57,10 +58,19 @@ async function api<T = any>(path: string, opts: AxiosRequestConfig = {}): Promis
 
       if (data && typeof data === 'object' && 'detail' in data) {
         message = data.detail
+      } else if (data && typeof data === 'object') {
+        const fieldErrors = Object.entries(data)
+          .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+          .join('; ');
+        if (fieldErrors) {
+          message = fieldErrors;
+        } else if (axiosError.message) {
+          message = axiosError.message;
+        }
       } else if (axiosError.message) {
         message = axiosError.message
       } else if (status) {
-        message = `HTTP ${status}`
+        message = `HTTP ${status}`;
       }
     } else if (error instanceof Error) {
       console.error('[api error]', error.message)
@@ -77,10 +87,10 @@ export function register(data: RegisterPayload) {
   })
 }
 
-export function login(email: string, password: string) {
+export function login(username: string, password: string) {
   return api('/api/token', {
     method: 'POST',
-    data: JSON.stringify({ email, password }),
+    data: JSON.stringify({ username, password }),
   })
 }
 
@@ -92,8 +102,9 @@ export function logout() {
 
 export type User = {
   id: number
+  username: string
   name: string
-  email: string
+  email?: string
   phone: string
   country: string
   referral_code: string

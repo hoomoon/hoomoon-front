@@ -19,6 +19,7 @@ import { toast } from 'react-hot-toast'
 export default function Cadastro() {
   // Estados para os campos do formulário
   const router = useRouter()
+  const [username, setUsername] = useState("")
   const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")
   const [telefone, setTelefone] = useState("")
@@ -128,11 +129,18 @@ export default function Cadastro() {
   // useEffect para verificar e-mail com debounce
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (email && email.includes('@')) {
+      if (email.trim() && email.includes('@')) {
         checkEmailExists(email)
+      } else if (!email.trim()) {
+         setErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors.email;
+            return newErrors;
+        });
+        setEmailExists(false);
       }
-    }, 500) // 500ms de debounce
-
+    }, 500) 
+  
     return () => clearTimeout(timer)
   }, [email, checkEmailExists])
 
@@ -174,6 +182,63 @@ export default function Cadastro() {
       .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join(' ');
   }
+
+  const [usernameChecking, setUsernameChecking] = useState(false)
+  const [usernameExists, setUsernameExists] = useState(false)
+
+const checkUsernameExists = useCallback(async (usernameToCheck: string) => {
+  if (!usernameToCheck || usernameToCheck.length < 3) {
+    setErrors(prev => ({ ...prev, username: 'Nome de usuário deve ter pelo menos 3 caracteres.' }));
+    setUsernameExists(false);
+    return;
+  }
+  if (!/^[a-z0-9_.]+$/.test(usernameToCheck)) {
+    setErrors(prev => ({ ...prev, username: "Apenas letras minúsculas, números, '_' e '.'" }));
+    setUsernameExists(false);
+    return;
+  }
+  setErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors.username;
+      return newErrors;
+  });
+
+  setUsernameChecking(true);
+  try {
+    const response = await fetch(`${base}/api/check-username/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: usernameToCheck })
+    });
+    const data = await response.json();
+    setUsernameExists(data.exists);
+    if (data.exists) {
+      setErrors(prev => ({ ...prev, username: 'Este nome de usuário já está em uso' }));
+    }
+  } catch (error) {
+    console.error('Erro ao verificar nome de usuário:', error);
+    toast.error("Erro ao verificar nome de usuário. Tente novamente.");
+  } finally {
+    setUsernameChecking(false);
+  }
+}, [base]);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    if (username.trim()) {
+      checkUsernameExists(username);
+    } else {
+      setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.username;
+          return newErrors;
+      });
+      setUsernameExists(false);
+    }
+  }, 700);
+
+  return () => clearTimeout(timer);
+}, [username, checkUsernameExists]);
 
   // Obter parâmetros da URL de forma segura
   const searchParams = useSearchParams()
@@ -299,9 +364,21 @@ export default function Cadastro() {
 
     if (!nome.trim()) novosErros.nome = "Nome é obrigatório"
 
-    if (!email.trim()) novosErros.email = "E-mail é obrigatório"
-    else if (!/\S+@\S+\.\S+/.test(email)) novosErros.email = "E-mail inválido"
-    else if (emailExists) novosErros.email = "Este e-mail já está cadastrado"
+    if (!username.trim()) {
+      novosErros.username = "Nome de usuário é obrigatório";
+    } else if (username.trim().length < 3) {
+      novosErros.username = "Nome de usuário deve ter pelo menos 3 caracteres.";
+    } else if (!/^[a-z0-9_.]+$/.test(username.trim())) {
+      novosErros.username = "Nome de usuário pode conter apenas letras minúsculas, números, '_' e '.'";
+    } else if (usernameExists) {
+      novosErros.username = "Este nome de usuário já está em uso";
+    }
+
+    if (email.trim() && !/\S+@\S+\.\S+/.test(email)) {
+      novosErros.email = "E-mail inválido";
+    } else if (email.trim() && emailExists) {
+        novosErros.email = "Este e-mail já está cadastrado";
+    }
 
     if (!telefone.trim()) novosErros.telefone = "Telefone é obrigatório"
 
@@ -355,16 +432,22 @@ export default function Cadastro() {
   setErrors({})
   if (!validarFormulario()) return
 
+  if (username.trim() && !usernameChecking) await checkUsernameExists(username);
+  if (email.trim() && !emailChecking) await checkEmailExists(email);
+  if (isBrasil && cpf.trim() && !cpfChecking) await checkCpfExists(cpf);
+  await new Promise(resolve => setTimeout(resolve, 300));
+
   setIsSubmitting(true)
   try {
     await register({
+      username: username.trim(),
       name: nome.trim(),
-      email: email.trim(),
+      email: email.trim() ? email.trim() : undefined,
       phone: telefone,
       country: pais,
       cpf: isBrasil ? cpf.replace(/\D/g, '') : undefined,
       password: senha,
-      sponsor_code: ref || undefined,
+      sponsor_code: ref.trim() ? ref.trim() : undefined,
     })
     // on success, backend sets HTTP-Only cookies
     toast.success('Cadastro realizado com sucesso!')
@@ -425,6 +508,31 @@ export default function Cadastro() {
     setIsSubmitting(false)
   }
 }
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e && e.target) {
+      const rawUsername = e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, '');
+      setUsername(rawUsername);
+      setUsernameExists(false);
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.username;
+        return newErrors;
+      });
+    }
+  }
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e && e.target) {
+      setEmail(e.target.value);
+      setEmailExists(false);
+      setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.email;
+          return newErrors;
+      });
+    }
+  }
 
   // Manipuladores de eventos seguros
   const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -516,49 +624,83 @@ export default function Cadastro() {
             {errors.nome && <p className="text-xs text-red-500 mt-1">{errors.nome}</p>}
           </div>
 
-          {/* Campo de E-mail melhorado */}
+          {/* Nome de Usuário */}
           <div className="space-y-1">
             <div className="relative">
               <Input
-                type="email"
-                placeholder="E-mail"
-                value={email}
-                onChange={(e) => {
-                  if (e && e.target) {
-                    setEmail(e.target.value)
-                    setEmailExists(false)
-                  }
-                }}
+                type="text"
+                placeholder="Nome de usuário (ex: usuario_123)"
+                value={username}
+                onChange={handleUsernameChange}
                 className={`bg-transparent border text-white pr-10 ${
-                  errors.email || emailExists
-                    ? "border-red-400 focus:border-red-400" 
-                    : email && !emailChecking && !emailExists && /\S+@\S+\.\S+/.test(email)
+                  errors.username || usernameExists
+                    ? "border-red-400 focus:border-red-400"
+                    : username && !usernameChecking && !usernameExists && /^[a-z0-9_.]+$/.test(username) && username.length >=3
                     ? "border-green-400 focus:border-green-400"
                     : "border-[#66e0cc] focus:border-[#66e0cc]"
                 }`}
+                aria-describedby="username-hint"
               />
-              {/* Ícone de status */}
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                {emailChecking ? (
+                {usernameChecking ? (
                   <div className="w-4 h-4 border-2 border-[#66e0cc] border-t-transparent rounded-full animate-spin" />
-                ) : errors.email || emailExists ? (
+                ) : errors.username || usernameExists ? (
                   <AlertCircle className="h-5 w-5 text-red-500" />
-                ) : email && /\S+@\S+\.\S+/.test(email) ? (
+                ) : username && !errors.username && /^[a-z0-9_.]+$/.test(username) && username.length >=3 ? (
                   <Check className="h-5 w-5 text-green-500" />
                 ) : null}
               </div>
             </div>
-            {/* Mensagens de erro e feedback */}
-            {emailExists && (
+            {/* Texto da descrição ajustado para corresponder mais à imagem */}
+            <p id="username-hint" className="text-xs text-gray-500 mt-1">Apenas letras minúsculas, números, '_' 'e' '.' (mínimo 3 caracteres).</p>
+            
+            {usernameExists && (
               <p className="text-xs text-red-500 mt-1 flex items-center">
                 <AlertCircle className="h-3 w-3 mr-1" />
-                Este e-mail já está cadastrado. 
+                Este nome de usuário já está em uso.
+              </p>
+            )}
+            {errors.username && !usernameExists && (
+              <p className="text-xs text-red-500 mt-1">{errors.username}</p>
+            )}
+          </div>
+
+          {/* E-mail */}
+          <div className="space-y-1">
+            <div className="relative">
+              <Input
+                type="email"
+                placeholder="E-mail (opcional)"
+                value={email}
+                onChange={handleEmailChange}
+                className={`bg-transparent border text-white pr-10 ${
+                  errors.email || (email.trim() && emailExists)
+                    ? "border-red-400 focus:border-red-400"
+                    : email.trim() && !emailChecking && !emailExists && /\S+@\S+\.\S+/.test(email)
+                    ? "border-green-400 focus:border-green-400"
+                    : "border-[#66e0cc] focus:border-[#66e0cc]"
+                }`}
+              />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                {email.trim() && emailChecking ? (
+                  <div className="w-4 h-4 border-2 border-[#66e0cc] border-t-transparent rounded-full animate-spin" />
+                ) : errors.email || (email.trim() && emailExists) ? (
+                  <AlertCircle className="h-5 w-5 text-red-500" />
+                ) : email.trim() && /\S+@\S+\.\S+/.test(email) && !errors.email && !emailExists ? ( // Ícone de sucesso
+                  <Check className="h-5 w-5 text-green-500" />
+                ) : null}
+              </div>
+            </div>
+            {emailExists && email.trim() && (
+              <p className="text-xs text-red-500 mt-1 flex items-center">
+                <AlertCircle className="h-3 w-3 mr-1" />
+                Este e-mail já está cadastrado.
                 <Link href="/login" className="ml-1 text-[#66e0cc] hover:underline">
                   Fazer login?
                 </Link>
               </p>
             )}
-            {errors.email && !emailExists && (
+            {errors.email && !(email.trim() && emailExists) && (
               <p className="text-xs text-red-500 mt-1">{errors.email}</p>
             )}
           </div>
