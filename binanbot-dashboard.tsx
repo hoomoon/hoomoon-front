@@ -198,7 +198,7 @@ export default function BinanbotDashboard() {
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           <SidebarItem icon={<Home size={18} />} label="Início" active />
-          {/* <SidebarItem icon={<TrendingUp size={18} />} label="Investir" href="/investir" /> */}
+          <SidebarItem icon={<TrendingUp size={18} />} label="Investir" href="/investir" />
           {/* <SidebarItem icon={<Briefcase size={18} />} label="Meus Investimentos" href="/meus-investimentos" /> */}
           <SidebarItem icon={<Users size={18} />} label="Minha Rede" href="/minha-rede" />
           {/* <SidebarItem icon={<Users size={18} />} label="Programa de Afiliados" href="/programa-afiliados" /> */}
