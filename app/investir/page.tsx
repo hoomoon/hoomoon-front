@@ -1,25 +1,35 @@
+// app/investir/page.tsx
 "use client"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ParticlesBackground from "@/components/particles-background"
 import { useRouter } from "next/navigation"
 
-// Componente para cada card de plano
-interface PlanCardProps {
+// Interface para cada plano conforme esperado pela API
+interface Plan {
+  id: string
   title: string
   imageSrc: string
   features: string[]
   color: string
   tag?: string
-  onClick: () => void
+  minValue: number
 }
 
-const PlanCard = ({ title, imageSrc, features, color, tag, onClick }: PlanCardProps) => {
+// Componente para cada card de plano
+interface PlanCardProps {
+  plan: Plan
+  onClick: (plan: Plan) => void
+}
+
+const PlanCard = ({ plan, onClick }: PlanCardProps) => {
+  const { title, imageSrc, features, color, tag } = plan
   return (
     <div
-      className="relative flex flex-col items-center bg-[#0c0c0c] border border-[#1f1f1f] rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(102,224,204,0.15)] hover:border-[#66e0cc]/30 overflow-hidden group cursor-pointer"
-      onClick={onClick}
+      className="relative flex flex-col justify-between items-center h-full bg-[#0c0c0c] border border-[#1f1f1f] rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(102,224,204,0.15)] hover:border-[#66e0cc]/30 overflow-hidden group cursor-pointer"
+      onClick={() => onClick(plan)}
     >
       {/* Gradiente de fundo */}
       <div
@@ -37,30 +47,33 @@ const PlanCard = ({ title, imageSrc, features, color, tag, onClick }: PlanCardPr
         </div>
       )}
 
-      {/* Imagem centralizada */}
-      <div className="w-48 h-48 mb-6 transition-transform duration-500 group-hover:scale-110 relative">
-        <div className="absolute inset-0 rounded-full opacity-20 blur-xl" style={{ background: color }}></div>
-        <img src={imageSrc || "/placeholder.svg"} alt={title} className="w-full h-full object-contain relative z-10" />
+      {/* Conteúdo central (imagem, título, características) */}
+      <div className="flex flex-col items-center">
+        {/* Imagem centralizada */}
+        <div className="w-48 h-48 mb-6 transition-transform duração-500 group-hover:scale-110 relative">
+          <div className="absolute inset-0 rounded-full opacity-20 blur-xl" style={{ background: color }}></div>
+          <img src={imageSrc || "/placeholder.svg"} alt={title} className="w-full h-full object-contain relative z-10" />
+        </div>
+
+        {/* Título */}
+        <h3 className="text-xl font-bold mb-4 text-center" style={{ color }}>
+          {title}
+        </h3>
+
+        {/* Lista de características */}
+        <ul className="text-gray-300 space-y-2 w-full">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start">
+              <span className="mr-2 text-[#66e0cc]">•</span>
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* Título */}
-      <h3 className="text-xl font-bold mb-4 text-center" style={{ color }}>
-        {title}
-      </h3>
-
-      {/* Lista de características */}
-      <ul className="text-gray-300 space-y-2 w-full">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <span className="mr-2 text-[#66e0cc]">•</span>
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      {/* Botão de investir */}
+      {/* Botão de investir, sempre no canto inferior central */}
       <button
-        className="w-full py-3 font-bold rounded-lg mt-6 transition-all duration-300 hover:brightness-110"
+        className="w-full py-3 font-bold rounded-lg mt-6 transition-all duração-300 hover:brightness-110"
         style={{ backgroundColor: color, color: "#000" }}
       >
         {title.includes("FREE") ? "Ativar Agora" : "Investir"}
@@ -71,69 +84,33 @@ const PlanCard = ({ title, imageSrc, features, color, tag, onClick }: PlanCardPr
 
 export default function Investir() {
   const router = useRouter()
+  const [plans, setPlans] = useState<Plan[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Dados dos planos
-  const plans = [
-    {
-      id: "FREE",
-      title: "Plano HOO FREE",
-      imageSrc: "/images/lua-free.png",
-      color: "#66e0cc",
-      minValue: 0,
-      features: [
-        "Plano gratuito para novos usuários",
-        "Acesso ao sistema e recompensas de indicação",
-        "Não exige investimento inicial",
-      ],
-    },
-    {
-      id: "PANDORA",
-      title: "Plano HOO PANDORA",
-      imageSrc: "/images/lua-pandora.png",
-      color: "#22c55e",
-      minValue: 5,
-      features: [
-        "Locação mínima: $5",
-        "Duração: 60 dias",
-        "Retorno total: 120%",
-        "Recompensa diária: até 2,00%",
-        "Saques diários",
-      ],
-    },
-    {
-      id: "TITAN",
-      title: "Plano HOO TITAN",
-      imageSrc: "/images/lua-titan.png",
-      color: "#b14aff",
-      tag: "Popular",
-      minValue: 10,
-      features: [
-        "Locação mínima: $10",
-        "Duração: 40 dias",
-        "Retorno total: 140%",
-        "Recompensa diária: até 3,25%",
-        "Saques a cada 3 dias",
-      ],
-    },
-    {
-      id: "CALLISTO",
-      title: "Plano HOO CALLISTO",
-      imageSrc: "/images/lua-callisto.png",
-      color: "#ff4a65",
-      tag: "Premium",
-      minValue: 20,
-      features: [
-        "Locação mínima: $20",
-        "Duração: 35 dias",
-        "Retorno total: 160%",
-        "Recompensa diária: até 4,57%",
-        "Saques a cada 10 dias",
-      ],
-    },
-  ]
+  useEffect(() => {
+    // Consome o endpoint de planos do backend usando variável de ambiente
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/plans`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar planos: ${response.statusText}`)
+        }
+        return response.json()
+      })
+      .then((data) => {
+        // Espera-se que a API retorne um array de objetos Plan
+        setPlans(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setError("Não foi possível carregar os planos. Tente novamente mais tarde.")
+        setLoading(false)
+      })
+  }, [])
 
-  const handlePlanClick = (plan: any) => {
-    if (plan.title.includes("FREE")) {
+  const handlePlanClick = (plan: Plan) => {
+    if (plan.id === "FREE" || plan.title.toUpperCase().includes("FREE")) {
       // Para o plano gratuito, redirecionar para página de ativação
       const params = new URLSearchParams({
         plan: plan.title,
@@ -186,20 +163,18 @@ export default function Investir() {
           </div>
         </div>
 
+        {/* Estado de carregamento e erro */}
+        {loading && <p className="text-center text-gray-400">Carregando planos...</p>}
+        {error && <p className="text-center text-red-500">{error}</p>}
+
         {/* Cards dos planos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {plans.map((plan) => (
-            <PlanCard
-              key={plan.id}
-              title={plan.title}
-              imageSrc={plan.imageSrc}
-              features={plan.features}
-              color={plan.color}
-              tag={plan.tag}
-              onClick={() => handlePlanClick(plan)}
-            />
-          ))}
-        </div>
+        {!loading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto items-stretch">
+            {plans.map((plan) => (
+              <PlanCard key={plan.id} plan={plan} onClick={handlePlanClick} />
+            ))}
+          </div>
+        )}
 
         {/* Informações adicionais */}
         <div className="max-w-3xl mx-auto mt-12 p-6 bg-[#0c0c0c] border border-[#1f1f1f] rounded-xl">
