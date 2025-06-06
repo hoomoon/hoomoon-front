@@ -117,10 +117,8 @@ export default function InvestirDepositoPage() {
     try {
       const baseApi = process.env.NEXT_PUBLIC_API_URL || 'https://api.hoomoon.ai'
       
-      // Se for PIX, envia o valor em BRL
-      const valorParaEnviar = metodo === 'PIX' 
-        ? (valorNumerico * USD_TO_BRL_RATE).toString()
-        : valor
+      // Sempre envia o valor em USD para a API
+      const valorParaEnviar = valor
 
       const response = await fetch(`${baseApi}/api/investments/deposits/initiate/`, {
         method: 'POST',
@@ -353,7 +351,13 @@ export default function InvestirDepositoPage() {
                       {isPolling && (
                         <div className="mt-2 flex items-center gap-2">
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          <span>Aguardando confirmação do pagamento...</span>
+                          <span>
+                            Aguardando confirmação do pagamento... 
+                            {depositResponse.paymentMethod === 'pix' 
+                              ? 'Pode levar até 5 minutos para a confirmação'
+                              : 'Pode levar até 10 minutos para a confirmação'
+                            }
+                          </span>
                         </div>
                       )}
                     </AlertDescription>
