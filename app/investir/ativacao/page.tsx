@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, CheckCircle, User, Mail, Calendar, Gift } from "lucide-react"
@@ -12,6 +12,30 @@ export default function AtivacaoFree() {
   const router = useRouter()
   const [isActivated, setIsActivated] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [alreadyHasFreePlan, setAlreadyHasFreePlan] = useState(false)
+
+  // Verificar se o usuário já tem o plano ativado
+  useEffect(() => {
+    const checkFreePlanStatus = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/investments/plans/free/status`, {
+          credentials: 'include'
+        })
+        
+        if (response.ok) {
+          const data = await response.json()
+          setAlreadyHasFreePlan(data.isActivated)
+          if (data.isActivated) {
+            setIsActivated(true)
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao verificar status do plano:', error)
+      }
+    }
+
+    checkFreePlanStatus()
+  }, [])
 
   // Dados do plano vindos da URL
   const planData = useMemo(
@@ -35,11 +59,27 @@ export default function AtivacaoFree() {
   const handleActivation = async () => {
     setIsLoading(true)
 
-    // Simular processo de ativação
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/investments/plans/free/activate/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      })
 
-    setIsActivated(true)
-    setIsLoading(false)
+      if (!response.ok) {
+        throw new Error('Falha ao ativar o plano')
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      setIsActivated(true)
+    } catch (error) {
+      console.error('Erro ao ativar o plano:', error)
+      // Aqui você pode adicionar um toast ou notificação de erro
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (isActivated) {
@@ -237,8 +277,8 @@ export default function AtivacaoFree() {
             {/* Botão de ativação */}
             <Button
               onClick={handleActivation}
-              disabled={isLoading}
-              className="w-full py-4 font-bold text-black rounded-lg transition-all hover:brightness-110 text-lg"
+              disabled={isLoading || alreadyHasFreePlan}
+              className="w-full py-4 font-bold text-black rounded-lg transition-all hover:brightness-110"
               style={{ backgroundColor: "#66e0cc" }}
             >
               {isLoading ? (
@@ -246,6 +286,8 @@ export default function AtivacaoFree() {
                   <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                   <span>Ativando...</span>
                 </div>
+              ) : alreadyHasFreePlan ? (
+                "Plano já ativado"
               ) : (
                 "Ativar Plano FREE"
               )}

@@ -25,59 +25,83 @@ interface PlanCardProps {
 }
 
 const PlanCard = ({ plan, onClick }: PlanCardProps) => {
-  const { title, imageSrc, features, color, tag } = plan
+  const { title, imageSrc, features, color } = plan
+  const [isFreePlanActivated, setIsFreePlanActivated] = useState(false)
+
+  useEffect(() => {
+    // Verifica o status do plano free apenas para o card do plano free
+    const checkFreePlanStatus = async () => {
+      if (plan.id === "FREE" || title.toUpperCase().includes("FREE")) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/investments/plans/free/status`, {
+            credentials: 'include'
+          })
+          
+          if (response.ok) {
+            const data = await response.json()
+            setIsFreePlanActivated(data.isActivated)
+          }
+        } catch (error) {
+          console.error('Erro ao verificar status do plano:', error)
+        }
+      }
+    }
+
+    checkFreePlanStatus()
+  }, [plan.id, title])
+
   return (
-    <div
-      className="relative flex flex-col justify-between items-center h-full bg-[#0c0c0c] border border-[#1f1f1f] rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(102,224,204,0.15)] hover:border-[#66e0cc]/30 overflow-hidden group cursor-pointer"
-      onClick={() => onClick(plan)}
-    >
-      {/* Gradiente de fundo */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
-        style={{ background: `radial-gradient(circle at center, ${color} 0%, transparent 70%)` }}
-      ></div>
+    <div className="bg-[#0c0c0c] border border-[#1f1f1f] rounded-2xl p-6 shadow-md hover:border-[#66e0cc]/30 transition-all duration-300 hover:shadow-[0_0_15px_rgba(102,224,204,0.15)] group h-full flex flex-col">
+      {/* Conteúdo do card (flex-grow para empurrar o botão para baixo) */}
+      <div className="flex-grow">
+        <div className="flex flex-col items-center">
+          {/* Imagem centralizada */}
+          <div className="w-48 h-48 mb-6 transition-transform duration-500 group-hover:scale-110 relative">
+            <div className="absolute inset-0 rounded-full opacity-20 blur-xl" style={{ background: color }}></div>
+            <img src={imageSrc || "/placeholder.svg"} alt={title} className="w-full h-full object-contain relative z-10" />
+          </div>
 
-      {/* Tag (se houver) */}
-      {tag && (
-        <div
-          className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold z-10"
-          style={{ backgroundColor: `${color}30`, color: color }}
-        >
-          {tag}
+          {/* Título */}
+          <h3 className="text-xl font-bold mb-4 text-center" style={{ color }}>
+            {title}
+          </h3>
+
+          {/* Lista de características */}
+          <ul className="text-gray-300 space-y-2 w-full">
+            {features.map((feature, index) => (
+              <li key={index} className="flex items-start">
+                <span className="mr-2 text-[#66e0cc]">•</span>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-      )}
-
-      {/* Conteúdo central (imagem, título, características) */}
-      <div className="flex flex-col items-center">
-        {/* Imagem centralizada */}
-        <div className="w-48 h-48 mb-6 transition-transform duração-500 group-hover:scale-110 relative">
-          <div className="absolute inset-0 rounded-full opacity-20 blur-xl" style={{ background: color }}></div>
-          <img src={imageSrc || "/placeholder.svg"} alt={title} className="w-full h-full object-contain relative z-10" />
-        </div>
-
-        {/* Título */}
-        <h3 className="text-xl font-bold mb-4 text-center" style={{ color }}>
-          {title}
-        </h3>
-
-        {/* Lista de características */}
-        <ul className="text-gray-300 space-y-2 w-full">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-start">
-              <span className="mr-2 text-[#66e0cc]">•</span>
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
-      {/* Botão de investir, sempre no canto inferior central */}
-      <button
-        className="w-full py-3 font-bold rounded-lg mt-6 transition-all duração-300 hover:brightness-110"
-        style={{ backgroundColor: color, color: "#000" }}
-      >
-        {title.includes("FREE") ? "Ativar Agora" : "Investir"}
-      </button>
+      {/* Botão sempre no final do card */}
+      <div className="mt-6">
+        <button
+          onClick={() => onClick(plan)}
+          className={`w-full py-3 font-bold rounded-lg transition-all duration-300 ${
+            isFreePlanActivated && (plan.id === "FREE" || title.toUpperCase().includes("FREE"))
+              ? "bg-[#3d8a7a] cursor-not-allowed"
+              : "hover:brightness-110"
+          }`}
+          style={{ 
+            backgroundColor: isFreePlanActivated && (plan.id === "FREE" || title.toUpperCase().includes("FREE")) 
+              ? "#3d8a7a" 
+              : color,
+            color: "#000"
+          }}
+          disabled={isFreePlanActivated && (plan.id === "FREE" || title.toUpperCase().includes("FREE"))}
+        >
+          {plan.id === "FREE" || title.toUpperCase().includes("FREE")
+            ? isFreePlanActivated
+              ? "Plano Ativado"
+              : "Ativar Agora"
+            : "Investir"}
+        </button>
+      </div>
     </div>
   )
 }
