@@ -16,9 +16,14 @@ export default function WalletOverview() {
   const base = process.env.NEXT_PUBLIC_BASE_URL || "https://www.hoomoon.ai"
   const baseApi = process.env.NEXT_PUBLIC_API_URL || "https://api.hoomoon.ai"
   const link = user?.referral_code
-  ? `${base}/cadastro?ref=${user.referral_code}`
-  : ""
+    ? `${base}/cadastro?ref=${user.referral_code}`
+    : ""
 
+  // Formatar o saldo do usuário
+  const formatBalance = (balance: number | undefined | null) => {
+    if (balance === undefined || balance === null) return "$ 0.00"
+    return `$ ${Number(balance).toFixed(2)}`
+  }
 
   const copiarLink = () => {
     navigator.clipboard.writeText(link)
@@ -26,21 +31,26 @@ export default function WalletOverview() {
     setTimeout(() => setCopiado(false), 2000)
   }
 
-useEffect(() => {
-  async function loadTotal() {
-    const res = await fetch(`${baseApi}/api/minha-rede/`, {
-      credentials: "include",
-    })
-    if (!res.ok) return
-    const data = await res.json()
-    const total = data.niveis.reduce(
-      (sum: number, lvl: any) => sum + lvl.indicados.length,
-      0
-    )
-    setTotalMembros(total)
-  }
-  loadTotal()
-}, [baseApi])
+  useEffect(() => {
+    async function loadTotal() {
+      try {
+        const res = await fetch(`${baseApi}/api/minha-rede/`, {
+          credentials: "include",
+        })
+        if (!res.ok) return
+        const data = await res.json()
+        const total = data.niveis.reduce(
+          (sum: number, lvl: any) => sum + lvl.indicados.length,
+          0
+        )
+        setTotalMembros(total)
+      } catch (error) {
+        console.error("Erro ao carregar total de membros:", error)
+        setTotalMembros(0)
+      }
+    }
+    loadTotal()
+  }, [baseApi])
 
   return (
     <div className="text-white space-y-4">
@@ -65,7 +75,7 @@ useEffect(() => {
       <div className="bg-transparent border border-[#66e0cc] rounded-xl p-4 grid grid-cols-1 md:grid-cols-4 items-center gap-4">
         <div>
           <p className="text-gray-400 text-sm mb-1">Saldo total</p>
-          <h3 className="text-3xl font-bold text-white">≈$ 0</h3>
+          <h3 className="text-3xl font-bold text-white">{formatBalance(user?.balance)}</h3>
           <p className="text-sm text-green-400 mt-1">
             0% <span className="text-gray-400">nas últimas 24h</span>
           </p>
@@ -74,7 +84,7 @@ useEffect(() => {
         <div className="flex flex-col">
           <p className="text-sm text-gray-400 mb-1">Comissões</p>
           <p className="text-lg text-emerald-400 font-semibold flex items-center gap-1">
-            <ArrowUpRight size={14} /> $ 0
+            <ArrowUpRight size={14} /> {formatBalance(0)}
           </p>
           <p className="text-xs text-gray-400">0 transações</p>
         </div>
@@ -82,7 +92,7 @@ useEffect(() => {
         <div className="flex flex-col">
           <p className="text-sm text-gray-400 mb-1">Retiradas</p>
           <p className="text-lg text-red-400 font-semibold flex items-center gap-1">
-            <ArrowDownRight size={14} /> $ 0
+            <ArrowDownRight size={14} /> {formatBalance(0)}
           </p>
           <p className="text-xs text-gray-400">0 transações</p>
         </div>
@@ -98,8 +108,8 @@ useEffect(() => {
 
       {/* OUTROS CARDS RESUMIDOS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard icon={<TrendingUp size={18} />} title="Total Investido" value="$ 0" color="text-emerald-400" />
-        <StatCard icon={<Gift size={18} />} title="Total de Rendimento" value="$ 0" color="text-emerald-400" />
+        <StatCard icon={<TrendingUp size={18} />} title="Total Investido" value={formatBalance(user?.invested_amount)} color="text-emerald-400" />
+        <StatCard icon={<Gift size={18} />} title="Total de Rendimento" value={formatBalance(user?.earnings)} color="text-emerald-400" />
         <StatCard
            icon={<Users size={18} />}
            title="Equipe"
@@ -109,7 +119,7 @@ useEffect(() => {
         <StatCard
           icon={<DollarSign size={18} />}
           title="Saldo Total da Equipe"
-          value="$ 0"
+          value={formatBalance(user?.team_balance)}
           color="text-emerald-400"
         />
       </div>

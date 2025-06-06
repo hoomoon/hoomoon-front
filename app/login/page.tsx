@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import ParticlesBackground from "@/components/particles-background"
 import { useAuth } from '@/app/providers/AuthProvider'
 import { login, whoami } from "@/lib/auth"
+import { Eye, EyeOff } from "lucide-react"
 
 export default function LoginPage() {
   const { setUser } = useAuth()
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -30,7 +32,7 @@ export default function LoginPage() {
       let msg = "Falha no login. Tente novamente."
       const raw = typeof err === 'string' ? err : err.message || ''
       if (raw.includes("No active account found")) {
-        msg = "E-mail ou senha incorretos."
+        msg = "Nome de usuário ou senha incorretos."
       } else if (raw.includes("Network Error")) {
         msg = "Erro de conexão. Verifique sua internet."
       }
@@ -42,14 +44,16 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center relative">
-      <ParticlesBackground className="absolute inset-0" />
+      <div className="absolute inset-0">
+        <ParticlesBackground />
+      </div>
 
       <form
         onSubmit={handleSubmit}
         className="relative z-10 bg-transparent border border-[#66e0cc] rounded-xl p-8 space-y-4 max-w-md w-full"
         noValidate
       >
-      <div className="flex justify-center">
+        <div className="flex justify-center">
           <img
             src="/images/hoo-logo.png"
             alt="Hoomoon Logo"
@@ -85,15 +89,24 @@ export default function LoginPage() {
 
         <div>
           <label htmlFor="password" className="block text-sm mb-1">Senha</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-            placeholder="senha"
-            className="w-full bg-transparent border border-[#66e0cc] rounded-md py-2 px-3"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              placeholder="senha"
+              className="w-full bg-transparent border border-[#66e0cc] rounded-md py-2 px-3 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </div>
 
         <button

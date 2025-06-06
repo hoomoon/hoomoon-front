@@ -13,6 +13,14 @@ import { ArrowLeft, Copy, Check, Info, Loader2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import ParticlesBackground from "@/components/particles-background"
 import toast from 'react-hot-toast'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 interface DepositResponse {
   depositId: string
@@ -38,6 +46,13 @@ export default function InvestirDepositoPage() {
   const [initialized, setInitialized] = useState(false)
   const [error, setError] = useState<string>("")
   const [isPolling, setIsPolling] = useState(false)
+
+  // Estados para o diálogo de CPF
+  const [showCpfDialog, setShowCpfDialog] = useState(false)
+  const [cpf, setCpf] = useState("")
+  const [cpfError, setCpfError] = useState("")
+  const [isSavingCpf, setIsSavingCpf] = useState(false)
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
 
   // Constante para taxa de conversão USD -> BRL
   const USD_TO_BRL_RATE = 5.70
@@ -110,6 +125,29 @@ export default function InvestirDepositoPage() {
     if (valorNumerico < planData.minValue) {
       setError(`O valor mínimo para este plano é de $${planData.minValue}.`)
       return
+    }
+
+    // Se o método for PIX, verifica se tem CPF cadastrado
+    if (metodo === "PIX") {
+      try {
+        const baseApi = process.env.NEXT_PUBLIC_API_URL || 'https://api.hoomoon.ai'
+        const response = await fetch(`${baseApi}/api/check-cpf/`, {
+          credentials: 'include'
+        })
+        
+        if (!response.ok) {
+          throw new Error('Falha ao verificar CPF')
+        }
+
+        const data = await response.json()
+        if (!data.hasCpf) {
+          setShowCpfDialog(true)
+          return
+        }
+      } catch (error) {
+        toast.error('Erro ao verificar CPF. Tente novamente.')
+        return
+      }
     }
 
     setIsSubmitting(true)
@@ -216,6 +254,61 @@ export default function InvestirDepositoPage() {
       }
     }
   }, [depositResponse?.depositId])
+
+  // Função para formatar CPF: 123.456.789-00
+  const formatarCPF = (valor: string) => {
+    if (!valor) return ""
+    const numeros = valor.replace(/\D/g, "")
+    if (numeros.length <= 3) return numeros
+    if (numeros.length <= 6) return `${numeros.slice(0, 3)}.${numeros.slice(3)}`
+    if (numeros.length <= 9) return `${numeros.slice(0, 3)}.${numeros.slice(3, 6)}.${numeros.slice(6)}`
+    return `${numeros.slice(0, 3)}.${numeros.slice(3, 6)}.${numeros.slice(6, 9)}-${numeros.slice(9, 11)}`
+  }
+
+  // Função para validar CPF
+  const validarCPF = (cpf: string) => {
+    const cpfLimpo = cpf.replace(/\D/g, "")
+    if (cpfLimpo.length !== 11) {
+      return "CPF deve ter 11 dígitos"
+    }
+    return ""
+  }
+
+  // Função para salvar o CPF
+  const salvarCPF = async () => {
+    const erro = validarCPF(cpf)
+    if (erro) {
+      setCpfError(erro)
+      return
+    }
+
+    setIsSavingCpf(true)
+    try {
+      const baseApi = process.env.NEXT_PUBLIC_API_URL || 'https://api.hoomoon.ai'
+      const response = await fetch(`${baseApi}/api/update-cpf/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ cpf: cpf.replace(/\D/g, "") })
+      })
+
+      if (!response.ok) {
+        throw new Error('Falha ao salvar CPF')
+      }
+
+      setShowCpfDialog(false)
+      setShowConfirmDialog(true)
+      setTimeout(() => {
+        setShowConfirmDialog(false)
+        handleSubmit(new Event('submit') as any)
+      }, 2000)
+    } catch (error) {
+      toast.error('Erro ao salvar CPF. Tente novamente.')
+      setCpfError('Erro ao salvar CPF. Tente novamente.')
+    } finally {
+      setIsSavingCpf(false)
+    }
+  }
 
   if (depositResponse) {
     return (
@@ -387,8 +480,75 @@ export default function InvestirDepositoPage() {
     )
   }
 
+  // Diálogos de CPF
+  const renderDialogs = () => (
+    <>
+      <Dialog open={showCpfDialog} onOpenChange={setShowCpfDialog}>
+        <DialogContent className="border-[#66e0cc]/20 bg-[#0a0a0a] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#66e0cc]">CPF não cadastrado</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              Para realizar depósitos via PIX, é necessário ter um CPF cadastrado. Deseja cadastrar agora?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Input
+                placeholder="Digite seu CPF"
+                value={cpf}
+                onChange={(e) => {
+                  setCpf(formatarCPF(e.target.value))
+                  setCpfError("")
+                }}
+                className="border-[#66e0cc]/20 bg-[#111111] text-white focus-visible:ring-[#66e0cc]"
+              />
+              {cpfError && (
+                <p className="text-xs text-red-500">{cpfError}</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => setShowCpfDialog(false)}
+              className="text-white hover:bg-[#111111]"
+            >
+              Cadastrar depois
+            </Button>
+            <Button
+              onClick={salvarCPF}
+              disabled={isSavingCpf}
+              className="bg-[#66e0cc] text-black hover:bg-[#66e0cc]/80"
+            >
+              {isSavingCpf ? (
+                <div className="flex items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Salvando...
+                </div>
+              ) : (
+                "Salvar CPF"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent className="border-[#66e0cc]/20 bg-[#0a0a0a] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#66e0cc]">CPF cadastrado com sucesso!</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              Seu CPF foi cadastrado com sucesso. Agora você pode prosseguir com o depósito via PIX.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+
   return (
     <main className="min-h-screen bg-black text-white relative overflow-hidden">
+      {renderDialogs()}
       <div className="fixed inset-0 z-0">
         <ParticlesBackground />
       </div>

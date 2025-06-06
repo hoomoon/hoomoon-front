@@ -108,6 +108,10 @@ export type User = {
   phone: string
   country: string
   referral_code: string
+  balance: number
+  invested_amount: number
+  earnings: number
+  team_balance: number
 }
 
 export function whoami(): Promise<User> {
