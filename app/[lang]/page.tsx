@@ -700,7 +700,7 @@ const translations = {
     "login": "Đăng nhập",
     "hero": {
       "tag": "Quỹ đầu tư tiền điện tử",
-      "title": "Chhúng tôi không tạo ra một đồng tiền. Chúng tôi tạo ra con đường trực tiếp đến sự tăng giá của nó.",
+      "title": "Chhúng tôi không tạo ra một đồng tiền. Chúng tôi tạo ra con đường trực tiếp đến sự tăng giá của nó",
       "subtitle": "Truy cập sớm vào cuộc cách mạng tiếp theo trong phân phối giá trị tiền điện tử.",
       "getStarted": "Bắt đầu",
       "viewPlans": "Xem kế hoạch",
@@ -871,7 +871,7 @@ const translations = {
     "login": "로그인",
     "hero": {
       "tag": "암호화폐 투자 펀드",
-      "title": "우리리는 화폐를 만든 것이 아닙니다. 우리는 그것의 가치 상승으로 가는 직행로를 만들었습니다.",
+      "title": "우리리는 화폐를 만든 것이 아닙니다. 우리는 그것의 가치 상승으로 가는 직행로를 만들었습니다",
       "subtitle": "암호화폐 가치 분배의 다음 혁명에 조기 접근하세요.",
       "getStarted": "시작하기",
       "viewPlans": "플랜 보기",
@@ -1036,10 +1036,691 @@ const translations = {
         "volume": "25억 달러"
       }
     }
+  },
+  "ru": {
+    "platformMessage": "Эта платформа — официальная среда Hoomoon.",
+    "login": "Войти",
+    "hero": {
+      "tag": "Инвестиционный фонд в криптовалюту",
+      "title": "Мыы не создавали валюту. Мы создали прямой путь к её росту",
+      "subtitle": "Ранний доступ к следующей революции в распределении криптоценности.",
+      "getStarted": "Начать",
+      "viewPlans": "Посмотреть планы",
+      "fundInfo": "HOOMOON владеет 630 миллионами APTM (30% от общего предложения)",
+      "techInfo": "Основано на технологиях. Подтверждено фактами.",
+      "scrollText": "Прокрутите вниз, чтобы узнать больше"
+    },
+    "stats": {
+      "title": "Почему стоит доверять APTM?",
+      "description": "APTM (Apertum) — это совместимая с EVM блокчейн-сеть уровня 1 с высокой масштабируемостью и минимальными комиссиями. Недавно была добавлена на MEXC — одну из 10 крупнейших бирж в мире.",
+      "uniqueWallets": "Уникальные кошельки",
+      "dailyTransactions": "Ежедневные транзакции",
+      "dailyVolume": "Дневной объём",
+      "activePools": "Активные DEX пулы",
+      "baseTechnology": "Базовая технология",
+      "mexcTitle": "MEXC:",
+      "mexcStats": {
+        "rank": "7-я по величине в мире",
+        "visits": "+6 миллионов визитов в неделю",
+        "volume": "2,5 миллиарда долларов в день"
+      },
+      "institutional": "HOOMOON — один из крупнейших институциональных держателей APTM."
+    },
+    "math": {
+      "title": "Математика HOOMOON",
+      "description": "Каждое увеличение стоимости APTM на $0,01 приносит HOOMOON $6,3 млн прибыли. При текущей цене $1,14 фонд уже получил $88,2 млн — не продав ни одного токена.",
+      "calculation": "Простой расчет:",
+      "items": {
+        "holds": "HOOMOON владеет 630 миллионами APTM",
+        "appreciation": "Каждое увеличение на $0,01 = $6,3 млн",
+        "current": "Текущая прибыль: $88,2 млн"
+      },
+      "future": {
+        "title": "А если цена достигнет $5.00?",
+        "description": "Фонд HOOMOON будет стоить более $3,15 млрд, с накопленной прибылью более $2,5 млрд."
+      }
+    },
+    "roadmap": {
+      "title": "Дорожная карта роста — уже в процессе",
+      "months": ["Январь", "Февраль", "Март", "Апрель", "Май"],
+      "status": {
+        "complete": "завершено",
+        "current": "текущее",
+        "future": "будущее"
+      },
+      "currentStatus": "Мы на этом этапе",
+      "finalProfit": "Накопленная прибыль фонда HOOMOON: $88,2 млн"
+    },
+    "captation": {
+      "title": "Почему только $10 млн?",
+      "subtitle": "Ликвидность уже есть\nПрибыль уже получена\nСбор средств нужен только для расширения, структуры и стратегического роста",
+      "example": "Пример:",
+      "items": {
+        "fundraising": "Сбор средств: $10 000 000",
+        "plan": "План CALLISTO: доходность 160% за 40 дней",
+        "needed": "Требуется $6 млн для покрытия всех выплат"
+      },
+      "conclusion": {
+        "title": "С прибылью $88,2 млн в фонде:",
+        "items": [
+          "HOOMOON может провести более 14 полных циклов CALLISTO",
+          "Без необходимости в новых поступлениях"
+        ]
+      }
+    },
+    "plans": {
+      "title": "🌙 Планы HOOMOON | Выберите свою ЛУНУ",
+      "description": "Как это работает?\nВыберите свой план ЛУНЫ\nАктивируйте через Pix, крипту или внутренний баланс\nПолучайте автоматическую ежедневную прибыль\nВывод доступен через 24ч — с понедельника по пятницу",
+      "free": {
+        "title": "🆓 HOO FREE",
+        "features": [
+          "Бесплатный доступ",
+          "Приглашайте и зарабатывайте",
+          "Инвестиции не требуются"
+        ],
+        "button": "Начать бесплатно"
+      },
+      "pandora": {
+        "title": "🌙 HOO PANDORA",
+        "features": [
+          "$5 на 60 дней",
+          "Доходность 120% (2,00% в день)",
+          "Ежедневные выводы"
+        ],
+        "button": "Инвестировать"
+      },
+      "titan": {
+        "title": "💠 HOO TITAN",
+        "features": [
+          "$10 на 40 дней",
+          "Доходность 140% (3,25% в день)",
+          "Вывод каждые 3 дня"
+        ],
+        "button": "Инвестировать"
+      },
+      "callisto": {
+        "title": "🪐 HOO CALLISTO",
+        "features": [
+          "$20 на 40 дней",
+          "Доходность 160% (4,57% в день)",
+          "Вывод каждые 10 дней"
+        ],
+        "button": "Инвестировать",
+        "popular": "Популярное"
+      }
+    },
+    "rewards": {
+      "title": "🧠 Партнёрская программа",
+      "silver": {
+        "title": "🥈 HOO SILVER",
+        "features": [
+          "Автоматический доступ при любой активации",
+          "Прямая комиссия: 10%",
+          "Открывает уровни 2 и 3 при командном доходе $50"
+        ]
+      },
+      "gold": {
+        "title": "🥇 HOO GOLD",
+        "features": [
+          "Открывается при накопленной прибыли $250 (уровни 1–4)"
+        ]
+      },
+      "black": {
+        "title": "🖤 HOO BLACK",
+        "features": [
+          "Комиссии до 10 уровня",
+          "Автоматическое повышение при выполнении условий"
+        ]
+      }
+    },
+    "transparency": {
+      "title": "🔍 Полная прозрачность",
+      "features": [
+        "Публичная регистрация в блокчейне",
+        "Аудируемые кошельки",
+        "Панель прибыли в реальном времени",
+        "DAO-управление в разработке"
+      ]
+    },
+    "cta": {
+      "title": "Вы не присоединяетесь, чтобы поддерживать систему. Вы присоединяетесь, чтобы воспользоваться уже полученной прибылью.",
+      "subtitle": "HOOMOON предлагает то, чего никогда не было на рынке: Реальную доходность. Прозрачный контроль. Распределение, основанное на уже выросшем фонде.",
+      "button": "Будьте среди первых, кто получит доступ к фонду"
+    },
+    "footer": {
+      "links": {
+        "website": "www.hoomoon.ai",
+        "terms": "Условия использования",
+        "privacy": "Политика конфиденциальности"
+      },
+      "location": "Штаб-квартира: Дубай | Запуск: январь 2025 года",
+      "copyright": "Все права защищены."
+    },
+    "dynamicValues": {
+      "math": {
+        "holds": "630 миллионов APTM",
+        "appreciation": "= $6,3 млн",
+        "current": "$88,2 млн"
+      },
+      "mexc": {
+        "visits": "+6 миллионов",
+        "volume": "$2,5 миллиарда"
+      }
+    }
+  },
+  "hi": {
+    "platformMessage": "यह प्लेटफ़ॉर्म Hoomoon का आधिकारिक वातावरण है।",
+    "login": "लॉगिन करें",
+    "hero": {
+      "tag": "क्रिप्टो निवेश फंड",
+      "title": "हममने कोई मुद्रा नहीं बनाई। हमने इसके मूल्यवर्धन का सीधा रास्ता बनाया।",
+      "subtitle": "क्रिप्टो वैल्यू डिस्ट्रीब्यूशन में अगली क्रांति के लिए प्रारंभिक पहुँच।",
+      "getStarted": "शुरू करें",
+      "viewPlans": "योजनाएँ देखें",
+      "fundInfo": "HOOMOON के पास 630 मिलियन APTM (कुल आपूर्ति का 30%) है।",
+      "techInfo": "प्रौद्योगिकी द्वारा संचालित, तथ्यों द्वारा समर्थित।",
+      "scrollText": "खोजने के लिए नीचे स्क्रॉल करें"
+    },
+    "stats": {
+      "title": "APTM पर भरोसा क्यों करें?",
+      "description": "APTM (Apertum) एक लेयर 1 ब्लॉकचेन है जो EVM-संगत है, अत्यधिक स्केलेबल है और कम शुल्क पर कार्य करता है। हाल ही में यह दुनिया के शीर्ष 10 एक्सचेंजों में से एक MEXC पर सूचीबद्ध हुआ है।",
+      "uniqueWallets": "अद्वितीय वॉलेट्स",
+      "dailyTransactions": "दैनिक लेनदेन",
+      "dailyVolume": "दैनिक वॉल्यूम",
+      "activePools": "सक्रिय DEX पूल्स",
+      "baseTechnology": "आधारभूत तकनीक",
+      "mexcTitle": "MEXC:",
+      "mexcStats": {
+        "rank": "दुनिया में 7वां सबसे बड़ा",
+        "visits": "साप्ताहिक 6 मिलियन+ विज़िट्स",
+        "volume": "2.5 बिलियन USD दैनिक वॉल्यूम"
+      },
+      "institutional": "HOOMOON, APTM का एक प्रमुख संस्थागत धारक है।"
+    },
+    "math": {
+      "title": "HOOMOON की गणना",
+      "description": "हर $0.01 की APTM वृद्धि से HOOMOON को $6.3 मिलियन का लाभ होता है। वर्तमान मूल्य $1.14 होने पर, फंड ने पहले ही $88.2 मिलियन का लाभ अर्जित किया है — बिना कोई टोकन बेचे।",
+      "calculation": "सरल गणना:",
+      "items": {
+        "holds": "HOOMOON के पास 630 मिलियन APTM हैं",
+        "appreciation": "हर $0.01 की वृद्धि = $6.3 मिलियन",
+        "current": "वर्तमान लाभ: $88.2 मिलियन"
+      },
+      "future": {
+        "title": "अगर यह $5.00 तक पहुँच जाए?",
+        "description": "HOOMOON फंड का मूल्य $3.15 बिलियन से अधिक होगा, और $2.5 बिलियन से अधिक की संचित लाभ होगा।"
+      }
+    },
+    "roadmap": {
+      "title": "वैल्यू ग्रोथ रोडमैप — पहले से शुरू हो चुका है",
+      "months": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई"],
+      "status": {
+        "complete": "पूरा हुआ",
+        "current": "वर्तमान",
+        "future": "भविष्य"
+      },
+      "currentStatus": "हम यहाँ हैं",
+      "finalProfit": "HOOMOON फंड का संचित लाभ: $88.2 मिलियन"
+    },
+    "captation": {
+      "title": "केवल $10 मिलियन ही क्यों जुटाना?",
+      "subtitle": "लिक्विडिटी पहले से मौजूद है\nलाभ पहले ही उत्पन्न हो चुका है\nफंडिंग केवल विस्तार, संरचना और रणनीतिक वृद्धि के लिए है",
+      "example": "उदाहरण:",
+      "items": {
+        "fundraising": "फंडिंग: $10,000,000",
+        "plan": "CALLISTO योजना: 40 दिनों में 160% रिटर्न",
+        "needed": "सब कुछ भुगतान करने के लिए $6M आवश्यक"
+      },
+      "conclusion": {
+        "title": "$88.2M के लाभ के साथ:",
+        "items": [
+          "HOOMOON 14 से अधिक पूर्ण CALLISTO साइकल चला सकता है",
+          "नई एंट्री पर निर्भर हुए बिना"
+        ]
+      }
+    },
+    "plans": {
+      "title": "🌙 HOOMOON योजनाएँ | अपनी MOON चुनें",
+      "description": "यह कैसे काम करता है?\nअपनी MOON चुनें\nPix, क्रिप्टो या आंतरिक बैलेंस से सक्रिय करें\nस्वचालित दैनिक लाभ प्राप्त करें\n24 घंटे बाद निकासी — सोमवार से शुक्रवार",
+      "free": {
+        "title": "🆓 HOO FREE",
+        "features": [
+          "नि:शुल्क एक्सेस",
+          "रेफर करें और कमाएँ",
+          "कोई निवेश आवश्यक नहीं"
+        ],
+        "button": "नि:शुल्क शुरू करें"
+      },
+      "pandora": {
+        "title": "🌙 HOO PANDORA",
+        "features": [
+          "$5 के लिए 60 दिन",
+          "120% रिटर्न (2.00% प्रतिदिन)",
+          "दैनिक निकासी"
+        ],
+        "button": "अब निवेश करें"
+      },
+      "titan": {
+        "title": "💠 HOO TITAN",
+        "features": [
+          "$10 के लिए 40 दिन",
+          "140% रिटर्न (3.25% प्रतिदिन)",
+          "हर 3 दिन में निकासी"
+        ],
+        "button": "अब निवेश करें"
+      },
+      "callisto": {
+        "title": "🪐 HOO CALLISTO",
+        "features": [
+          "$20 के लिए 40 दिन",
+          "160% रिटर्न (4.57% प्रतिदिन)",
+          "हर 10 दिन में निकासी"
+        ],
+        "button": "अब निवेश करें",
+        "popular": "लोकप्रिय"
+      }
+    },
+    "rewards": {
+      "title": "🧠 रेफरल रिवॉर्ड प्रोग्राम",
+      "silver": {
+        "title": "🥈 HOO SILVER",
+        "features": [
+          "किसी भी सक्रियता के साथ स्वचालित एक्सेस",
+          "डायरेक्ट कमीशन: 10%",
+          "टीम की $50 की कमाई पर स्तर 2 और 3 अनलॉक करें"
+        ]
+      },
+      "gold": {
+        "title": "🥇 HOO GOLD",
+        "features": [
+          "$250 की संचित आय (स्तर 1 से 4) पर अनलॉक होता है"
+        ]
+      },
+      "black": {
+        "title": "🖤 HOO BLACK",
+        "features": [
+          "10वें स्तर तक कमीशन प्राप्त करें",
+          "मानदंड पूर्ण होने पर स्वचालित प्रमोशन"
+        ]
+      }
+    },
+    "transparency": {
+      "title": "🔍 पूर्ण पारदर्शिता",
+      "features": [
+        "सार्वजनिक ब्लॉकचेन पंजीकरण",
+        "ऑडिट करने योग्य वॉलेट्स",
+        "रियल-टाइम आय डैशबोर्ड",
+        "विकासाधीन DAO गवर्नेंस"
+      ]
+    },
+    "cta": {
+      "title": "आप सिस्टम को बनाए रखने के लिए शामिल नहीं होते, बल्कि उस लाभ का हिस्सा बनने के लिए होते हैं जो पहले ही उत्पन्न हो चुका है।",
+      "subtitle": "HOOMOON वह प्रदान करता है जो बाज़ार कभी नहीं कर पाया: वास्तविक लाभप्रदता। पारदर्शी नियंत्रण। उस फंड पर आधारित वितरण जो पहले ही करोड़ों का लाभ अर्जित कर चुका है।",
+      "button": "फंड तक पहुँचने वाले पहले लोगों में से बनें"
+    },
+    "footer": {
+      "links": {
+        "website": "www.hoomoon.ai",
+        "terms": "उपयोग की शर्तें",
+        "privacy": "गोपनीयता नीति"
+      },
+      "location": "मुख्यालय: दुबई | जनवरी 2025 में लॉन्च हुआ",
+      "copyright": "सभी अधिकार सुरक्षित।"
+    },
+    "dynamicValues": {
+      "math": {
+        "holds": "630 मिलियन APTM",
+        "appreciation": "= $6.3 मिलियन",
+        "current": "$88.2 मिलियन"
+      },
+      "mexc": {
+        "visits": "+6 मिलियन",
+        "volume": "$2.5 बिलियन"
+      }
+    }
+  },
+  "it": {
+    "platformMessage": "Questa piattaforma è un ambiente ufficiale di Hoomoon.",
+    "login": "Accedi",
+    "hero": {
+      "tag": "Fondo di investimento in criptovalute",
+      "title": "Noon abbiamo creato una valuta. Abbiamo creato un percorso diretto verso la sua crescita",
+      "subtitle": "Accesso anticipato alla prossima rivoluzione nella distribuzione del valore crypto.",
+      "getStarted": "Inizia ora",
+      "viewPlans": "Visualizza i piani",
+      "fundInfo": "HOOMOON detiene 630 milioni di APTM (30% dell'offerta totale)",
+      "techInfo": "Guidato dalla tecnologia. Basato sui fatti.",
+      "scrollText": "Scorri per scoprire"
+    },
+    "stats": {
+      "title": "Perché fidarsi di APTM?",
+      "description": "APTM (Apertum) è una blockchain Layer 1 compatibile con EVM, scalabile e con commissioni ultra basse. È stata recentemente quotata su MEXC, uno dei 10 exchange più grandi al mondo.",
+      "uniqueWallets": "Wallet unici",
+      "dailyTransactions": "Transazioni giornaliere",
+      "dailyVolume": "Volume giornaliero",
+      "activePools": "Pool DEX attivi",
+      "baseTechnology": "Tecnologia di base",
+      "mexcTitle": "MEXC:",
+      "mexcStats": {
+        "rank": "Settimo più grande al mondo",
+        "visits": "Oltre 6 milioni di visite settimanali",
+        "volume": "2,5 miliardi di USD al giorno"
+      },
+      "institutional": "HOOMOON è uno dei maggiori detentori istituzionali di APTM."
+    },
+    "math": {
+      "title": "La matematica di HOOMOON",
+      "description": "Per ogni aumento di 0,01 USD di APTM, HOOMOON guadagna 6,3 milioni USD. Con un prezzo attuale di 1,14 USD, il fondo ha già generato 88,2 milioni USD di profitto — senza vendere un solo token.",
+      "calculation": "Calcolo semplice:",
+      "items": {
+        "holds": "HOOMOON detiene 630 milioni di APTM",
+        "appreciation": "Ogni aumento di 0,01 USD = 6,3 milioni USD",
+        "current": "Valore attuale: 88,2 milioni USD"
+      },
+      "future": {
+        "title": "E se raggiungesse 5,00 USD?",
+        "description": "Il fondo HOOMOON avrebbe un valore superiore a 3,15 miliardi USD, con oltre 2,5 miliardi USD di profitto accumulato."
+      }
+    },
+    "roadmap": {
+      "title": "Roadmap di crescita — già in corso",
+      "months": ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio"],
+      "status": {
+        "complete": "completato",
+        "current": "in corso",
+        "future": "futuro"
+      },
+      "currentStatus": "Siamo qui",
+      "finalProfit": "Profitto accumulato del fondo HOOMOON: 88,2 milioni USD"
+    },
+    "captation": {
+      "title": "Perché raccogliere solo 10 milioni USD?",
+      "subtitle": "La liquidità esiste già\nIl profitto è già stato generato\nLa raccolta serve solo per espansione, struttura e crescita strategica",
+      "example": "Esempio:",
+      "items": {
+        "fundraising": "Raccolta fondi: 10.000.000 USD",
+        "plan": "Piano CALLISTO: ritorno del 160% in 40 giorni",
+        "needed": "Necessari 6M USD per coprire tutto"
+      },
+      "conclusion": {
+        "title": "Con 88,2M USD di profitto nel fondo:",
+        "items": [
+          "HOOMOON può coprire più di 14 cicli CALLISTO completi",
+          "Senza dipendere da nuovi ingressi"
+        ]
+      }
+    },
+    "plans": {
+      "title": "🌙 Piani HOOMOON | Scegli la tua LUNA",
+      "description": "Come funziona?\nScegli la tua LUNA\nAttiva con Pix, crypto o saldo interno\nRicevi profitti giornalieri automatici\nPrelievi disponibili dopo 24h — dal lunedì al venerdì",
+      "free": {
+        "title": "🆓 HOO FREE",
+        "features": [
+          "Accesso gratuito",
+          "Invita e guadagna",
+          "Nessun investimento richiesto"
+        ],
+        "button": "Inizia gratis"
+      },
+      "pandora": {
+        "title": "🌙 HOO PANDORA",
+        "features": [
+          "5 USD per 60 giorni",
+          "Rendimento del 120% (2,00% al giorno)",
+          "Prelievi giornalieri"
+        ],
+        "button": "Investi ora"
+      },
+      "titan": {
+        "title": "💠 HOO TITAN",
+        "features": [
+          "10 USD per 40 giorni",
+          "Rendimento del 140% (3,25% al giorno)",
+          "Prelievi ogni 3 giorni"
+        ],
+        "button": "Investi ora"
+      },
+      "callisto": {
+        "title": "🪐 HOO CALLISTO",
+        "features": [
+          "20 USD per 40 giorni",
+          "Rendimento del 160% (4,57% al giorno)",
+          "Prelievi ogni 10 giorni"
+        ],
+        "button": "Investi ora",
+        "popular": "Popolare"
+      }
+    },
+    "rewards": {
+      "title": "🧠 Programma di ricompensa per i referral",
+      "silver": {
+        "title": "🥈 HOO SILVER",
+        "features": [
+          "Accesso automatico con qualsiasi attivazione",
+          "Commissione diretta: 10%",
+          "Sblocca i livelli 2 e 3 con 50 USD guadagnati in team"
+        ]
+      },
+      "gold": {
+        "title": "🥇 HOO GOLD",
+        "features": [
+          "Sbloccato con 250 USD di guadagni accumulati (livelli da 1 a 4)"
+        ]
+      },
+      "black": {
+        "title": "🖤 HOO BLACK",
+        "features": [
+          "Commissioni fino al livello 10",
+          "Upgrade automatico al raggiungimento dei criteri"
+        ]
+      }
+    },
+    "transparency": {
+      "title": "🔍 Trasparenza Totale",
+      "features": [
+        "Registrazione pubblica sulla blockchain",
+        "Wallet verificabili",
+        "Pannello profitti in tempo reale",
+        "Governance DAO in sviluppo"
+      ]
+    },
+    "cta": {
+      "title": "Non entri per sostenere il sistema. Entri per beneficiare dei profitti già generati.",
+      "subtitle": "HOOMOON offre ciò che il mercato non è mai riuscito a fare: Redditività reale. Controllo trasparente. Distribuzione basata su un fondo che ha già guadagnato milioni.",
+      "button": "Sii tra i primi ad accedere al fondo"
+    },
+    "footer": {
+      "links": {
+        "website": "www.hoomoon.ai",
+        "terms": "Termini di utilizzo",
+        "privacy": "Informativa sulla privacy"
+      },
+      "location": "Sede: Dubai | Lanciato a gennaio 2025",
+      "copyright": "Tutti i diritti riservati."
+    },
+    "dynamicValues": {
+      "math": {
+        "holds": "630 milioni APTM",
+        "appreciation": "= 6,3 milioni USD",
+        "current": "88,2 milioni USD"
+      },
+      "mexc": {
+        "visits": "+6 milioni",
+        "volume": "2,5 miliardi USD"
+      }
+    }
+  },
+  "de-CH": {
+    "platformMessage": "Diese Plattform ist eine offizielle Umgebung von Hoomoon.",
+    "login": "Anmelden",
+    "hero": {
+      "tag": "Krypto-Investmentfonds",
+      "title": "Wiir haben keine Währung geschaffen. Wir haben einen direkten Weg zu ihrem Wertzuwachs geschaffen",
+      "subtitle": "Früher Zugang zur nächsten Revolution in der Verteilung von Krypto-Werten.",
+      "getStarted": "Jetzt starten",
+      "viewPlans": "Pläne anzeigen",
+      "fundInfo": "HOOMOON hält 630 Millionen APTM (30 % des Gesamtangebots)",
+      "techInfo": "Technologiegetrieben. Faktenbasiert.",
+      "scrollText": "Scrollen, um mehr zu erfahren"
+    },
+    "stats": {
+      "title": "Warum APTM vertrauen?",
+      "description": "APTM (Apertum) ist eine Layer-1-Blockchain, die EVM-kompatibel, skalierbar und mit sehr niedrigen Gebühren arbeitet. Kürzlich wurde sie auf MEXC gelistet – einer der zehn grössten Börsen der Welt.",
+      "uniqueWallets": "Einzigartige Wallets",
+      "dailyTransactions": "Tägliche Transaktionen",
+      "dailyVolume": "Tägliches Volumen",
+      "activePools": "Aktive DEX-Pools",
+      "baseTechnology": "Basistechnologie",
+      "mexcTitle": "MEXC:",
+      "mexcStats": {
+        "rank": "7. grösste der Welt",
+        "visits": "Über 6 Millionen Besuche pro Woche",
+        "volume": "2,5 Milliarden USD tägliches Volumen"
+      },
+      "institutional": "HOOMOON ist einer der grössten institutionellen Halter von APTM."
+    },
+    "math": {
+      "title": "Die Mathematik von HOOMOON",
+      "description": "Für jeden Anstieg von 0.01 USD bei APTM erzielt HOOMOON einen Gewinn von 6.3 Millionen USD. Beim aktuellen Preis von 1.14 USD hat der Fonds bereits 88.2 Millionen USD Gewinn erzielt – ohne einen einzigen Token zu verkaufen.",
+      "calculation": "Einfache Berechnung:",
+      "items": {
+        "holds": "HOOMOON hält 630 Millionen APTM",
+        "appreciation": "Jeder Anstieg von 0.01 USD = 6.3 Mio. USD",
+        "current": "Aktueller Gewinn: 88.2 Mio. USD"
+      },
+      "future": {
+        "title": "Was, wenn der Preis 5.00 USD erreicht?",
+        "description": "Der HOOMOON-Fonds wäre über 3.15 Milliarden USD wert, mit über 2.5 Milliarden USD angesammeltem Gewinn."
+      }
+    },
+    "roadmap": {
+      "title": "Roadmap zur Wertsteigerung – bereits im Gange",
+      "months": ["Januar", "Februar", "März", "April", "Mai"],
+      "status": {
+        "complete": "abgeschlossen",
+        "current": "aktuell",
+        "future": "zukünftig"
+      },
+      "currentStatus": "Wir sind hier",
+      "finalProfit": "Kumulativer Gewinn des HOOMOON-Fonds: 88.2 Mio. USD"
+    },
+    "captation": {
+      "title": "Warum nur 10 Millionen USD sammeln?",
+      "subtitle": "Liquidität ist bereits vorhanden\nGewinn wurde bereits erzielt\nDie Mittelbeschaffung dient nur der Expansion, Struktur und strategischem Wachstum",
+      "example": "Beispiel:",
+      "items": {
+        "fundraising": "Fundraising: 10’000’000 USD",
+        "plan": "CALLISTO-Plan: 160 % Rendite in 40 Tagen",
+        "needed": "6 Mio. USD erforderlich, um alles auszuzahlen"
+      },
+      "conclusion": {
+        "title": "Mit 88.2 Mio. USD Gewinn im Fonds:",
+        "items": [
+          "HOOMOON kann über 14 vollständige CALLISTO-Zyklen finanzieren",
+          "Ohne auf neue Einzahlungen angewiesen zu sein"
+        ]
+      }
+    },
+    "plans": {
+      "title": "🌙 HOOMOON Pläne | Wähle deinen MOND",
+      "description": "Wie funktioniert es?\nWähle deinen MOND\nAktiviere mit Pix, Krypto oder internem Guthaben\nErhalte tägliche automatische Gewinne\nAuszahlungen nach 24 Std. — Montag bis Freitag",
+      "free": {
+        "title": "🆓 HOO FREE",
+        "features": [
+          "Kostenloser Zugang",
+          "Empfehlen und verdienen",
+          "Keine Investition erforderlich"
+        ],
+        "button": "Kostenlos starten"
+      },
+      "pandora": {
+        "title": "🌙 HOO PANDORA",
+        "features": [
+          "5 USD für 60 Tage",
+          "120 % Rendite (2.00 % pro Tag)",
+          "Tägliche Auszahlungen"
+        ],
+        "button": "Jetzt investieren"
+      },
+      "titan": {
+        "title": "💠 HOO TITAN",
+        "features": [
+          "10 USD für 40 Tage",
+          "140 % Rendite (3.25 % pro Tag)",
+          "Auszahlung alle 3 Tage"
+        ],
+        "button": "Jetzt investieren"
+      },
+      "callisto": {
+        "title": "🪐 HOO CALLISTO",
+        "features": [
+          "20 USD für 40 Tage",
+          "160 % Rendite (4.57 % pro Tag)",
+          "Auszahlung alle 10 Tage"
+        ],
+        "button": "Jetzt investieren",
+        "popular": "Beliebt"
+      }
+    },
+    "rewards": {
+      "title": "🧠 Empfehlungsprogramm",
+      "silver": {
+        "title": "🥈 HOO SILVER",
+        "features": [
+          "Automatischer Zugang mit jeder Aktivierung",
+          "Direkte Provision: 10 %",
+          "Stufen 2 und 3 mit 50 USD Teamgewinn freischalten"
+        ]
+      },
+      "gold": {
+        "title": "🥇 HOO GOLD",
+        "features": [
+          "Freigeschaltet mit 250 USD kumuliertem Gewinn (Stufe 1–4)"
+        ]
+      },
+      "black": {
+        "title": "🖤 HOO BLACK",
+        "features": [
+          "Provisionen bis zur 10. Ebene",
+          "Automatisches Upgrade bei erfüllten Kriterien"
+        ]
+      }
+    },
+    "transparency": {
+      "title": "🔍 Totale Transparenz",
+      "features": [
+        "Öffentliche Blockchain-Registrierung",
+        "Auditierbare Wallets",
+        "Echtzeit-Gewinn-Dashboard",
+        "DAO-Governance in Entwicklung"
+      ]
+    },
+    "cta": {
+      "title": "Du trittst nicht bei, um das System zu erhalten. Du trittst bei, um vom bereits erzielten Gewinn zu profitieren.",
+      "subtitle": "HOOMOON bietet, was der Markt nie konnte: Echte Rentabilität. Transparente Kontrolle. Verteilung basierend auf einem Fonds, der bereits Millionen wert ist.",
+      "button": "Sei einer der Ersten mit Zugang zum Fonds"
+    },
+    "footer": {
+      "links": {
+        "website": "www.hoomoon.ai",
+        "terms": "Nutzungsbedingungen",
+        "privacy": "Datenschutzrichtlinie"
+      },
+      "location": "Hauptsitz: Dubai | Start im Januar 2025",
+      "copyright": "Alle Rechte vorbehalten."
+    },
+    "dynamicValues": {
+      "math": {
+        "holds": "630 Millionen APTM",
+        "appreciation": "= 6.3 Mio. USD",
+        "current": "88.2 Mio. USD"
+      },
+      "mexc": {
+        "visits": "+6 Millionen",
+        "volume": "2.5 Milliarden USD"
+      }
+    }
   }
-
-
-
 
 }
 
@@ -1054,11 +1735,15 @@ function LanguageSelector({ currentLang }: { currentLang: string }) {
   
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'pt-BR', name: 'Português', flag: '🇧🇷' },
     { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'pt-BR', name: 'Português', flag: '🇧🇷' },
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+    { code: 'hi', name: 'हिंदी', flag: '🇮🇳' },
+    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+    { code: 'ko', name: '한국어', flag: '🇰🇷' },
     { code: 'vn', name: 'Việt Nam', flag: '🇻🇳' },
-    { code: 'ko', name: '한국어', flag: '🇰🇷' }
   ]
   
   const currentLanguage = languages.find(lang => lang.code === currentLang)
