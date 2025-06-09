@@ -16,16 +16,21 @@ export const metadata: Metadata = {
   title: "HOOMOON - O caminho mais rápido até a valorização cripto",
   description:
     "Fundo de investimento cripto com acesso antecipado à próxima revolução em distribuição de valor cripto.",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="pt-BR" className={`${urbanist.variable}`}>
+    <html lang="pt-BR" className={urbanist.variable}>
       <body className="font-urbanist antialiased">
         <AuthProvider>
           {children}
