@@ -1743,7 +1743,7 @@ function LanguageSelector({ currentLang }: { currentLang: string }) {
     { code: 'hi', name: 'हिंदी', flag: '🇮🇳' },
     { code: 'it', name: 'Italiano', flag: '🇮🇹' },
     { code: 'ko', name: '한국어', flag: '🇰🇷' },
-    { code: 'vn', name: 'Việt Nam', flag: '🇻🇳' },
+    { code: 'vn', name: 'Tiếng Việt', flag: '🇻🇳' },
   ]
   
   const currentLanguage = languages.find(lang => lang.code === currentLang)
