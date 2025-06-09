@@ -694,7 +694,351 @@ const translations = {
         "volume": "2,5 milliards USD"
       }
     }
+  },
+  "vn": {
+    "platformMessage": "Nền tảng này là môi trường chính thức của Hoomoon.",
+    "login": "Đăng nhập",
+    "hero": {
+      "tag": "Quỹ đầu tư tiền điện tử",
+      "title": "Chhúng tôi không tạo ra một đồng tiền. Chúng tôi tạo ra con đường trực tiếp đến sự tăng giá của nó.",
+      "subtitle": "Truy cập sớm vào cuộc cách mạng tiếp theo trong phân phối giá trị tiền điện tử.",
+      "getStarted": "Bắt đầu",
+      "viewPlans": "Xem kế hoạch",
+      "fundInfo": "HOOMOON nắm giữ 630 triệu APTM (30% tổng cung)",
+      "techInfo": "Được hỗ trợ bởi công nghệ. Dựa trên sự thật.",
+      "scrollText": "Cuộn xuống để khám phá"
+    },
+    "stats": {
+      "title": "Tại sao nên tin tưởng APTM?",
+      "description": "APTM (Apertum) là blockchain lớp 1 tương thích EVM, có khả năng mở rộng với phí cực thấp. Gần đây đã được niêm yết trên MEXC — một trong 10 sàn giao dịch hàng đầu thế giới.",
+      "uniqueWallets": "Ví duy nhất",
+      "dailyTransactions": "Giao dịch hàng ngày",
+      "dailyVolume": "Khối lượng giao dịch hàng ngày",
+      "activePools": "Pool DEX đang hoạt động",
+      "baseTechnology": "Công nghệ nền tảng",
+      "mexcTitle": "MEXC:",
+      "mexcStats": {
+        "rank": "Thứ 7 trên thế giới",
+        "visits": "+6 triệu lượt truy cập mỗi tuần",
+        "volume": "2,5 tỷ USD giao dịch mỗi ngày"
+      },
+      "institutional": "HOOMOON là một trong những tổ chức nắm giữ APTM lớn nhất."
+    },
+    "math": {
+      "title": "Toán học của HOOMOON",
+      "description": "Mỗi khi APTM tăng 0,01 USD, HOOMOON thu được 6,3 triệu USD lợi nhuận. Với mức giá hiện tại là 1,14 USD, quỹ đã tạo ra 88,2 triệu USD lợi nhuận — mà không cần bán một token nào.",
+      "calculation": "Phép tính đơn giản:",
+      "items": {
+        "holds": "HOOMOON nắm giữ 630 triệu APTM",
+        "appreciation": "Mỗi lần tăng 0,01 USD = 6,3 triệu USD",
+        "current": "Tăng giá hiện tại: 88,2 triệu USD"
+      },
+      "future": {
+        "title": "Nếu giá đạt 5,00 USD thì sao?",
+        "description": "Quỹ HOOMOON sẽ có giá trị hơn 3,15 tỷ USD, với hơn 2,5 tỷ USD lợi nhuận tích lũy."
+      }
+    },
+    "roadmap": {
+      "title": "Lộ trình tăng giá — đang được triển khai",
+      "months": ["Tháng Một", "Tháng Hai", "Tháng Ba", "Tháng Tư", "Tháng Năm"],
+      "status": {
+        "complete": "hoàn thành",
+        "current": "hiện tại",
+        "future": "tương lai"
+      },
+      "currentStatus": "Chúng tôi đang ở đây",
+      "finalProfit": "Lợi nhuận tích lũy của quỹ HOOMOON: 88,2 triệu USD"
+    },
+    "captation": {
+      "title": "Tại sao chỉ huy động 10 triệu USD?",
+      "subtitle": "Thanh khoản đã có\nLợi nhuận đã được tạo ra\nHuy động vốn chỉ để mở rộng, cấu trúc và tăng giá chiến lược",
+      "example": "Ví dụ:",
+      "items": {
+        "fundraising": "Huy động vốn: 10.000.000 USD",
+        "plan": "Kế hoạch CALLISTO: Lợi nhuận 160% trong 40 ngày",
+        "needed": "Cần 6 triệu USD để thanh toán toàn bộ"
+      },
+      "conclusion": {
+        "title": "Với 88,2 triệu USD lợi nhuận trong quỹ:",
+        "items": [
+          "HOOMOON có thể chi trả hơn 14 chu kỳ CALLISTO hoàn chỉnh",
+          "Không cần phụ thuộc vào dòng tiền mới"
+        ]
+      }
+    },
+    "plans": {
+      "title": "🌙 Kế hoạch HOOMOON | Chọn MẶT TRĂNG của bạn",
+      "description": "Hoạt động như thế nào?\nChọn MẶT TRĂNG của bạn\nKích hoạt bằng Pix, crypto hoặc số dư nội bộ\nNhận lợi nhuận hàng ngày tự động\nRút tiền sau 24h — từ thứ Hai đến thứ Sáu",
+      "free": {
+        "title": "🆓 HOO FREE",
+        "features": [
+          "Truy cập miễn phí",
+          "Giới thiệu và nhận thưởng",
+          "Không cần đầu tư"
+        ],
+        "button": "Bắt đầu miễn phí"
+      },
+      "pandora": {
+        "title": "🌙 HOO PANDORA",
+        "features": [
+          "5 USD trong 60 ngày",
+          "Lợi nhuận 120% (2,00% mỗi ngày)",
+          "Rút tiền hàng ngày"
+        ],
+        "button": "Đầu tư ngay"
+      },
+      "titan": {
+        "title": "💠 HOO TITAN",
+        "features": [
+          "10 USD trong 40 ngày",
+          "Lợi nhuận 140% (3,25% mỗi ngày)",
+          "Rút tiền mỗi 3 ngày"
+        ],
+        "button": "Đầu tư ngay"
+      },
+      "callisto": {
+        "title": "🪐 HOO CALLISTO",
+        "features": [
+          "20 USD trong 40 ngày",
+          "Lợi nhuận 160% (4,57% mỗi ngày)",
+          "Rút tiền mỗi 10 ngày"
+        ],
+        "button": "Đầu tư ngay",
+        "popular": "Phổ biến"
+      }
+    },
+    "rewards": {
+      "title": "🧠 Chương trình thưởng giới thiệu",
+      "silver": {
+        "title": "🥈 HOO SILVER",
+        "features": [
+          "Truy cập tự động với bất kỳ kích hoạt nào",
+          "Hoa hồng trực tiếp: 10%",
+          "Mở khóa cấp 2 và 3 khi đội nhóm đạt 50 USD"
+        ]
+      },
+      "gold": {
+        "title": "🥇 HOO GOLD",
+        "features": [
+          "Mở khóa với 250 USD lợi nhuận tích lũy (cấp 1 đến 4)"
+        ]
+      },
+      "black": {
+        "title": "🖤 HOO BLACK",
+        "features": [
+          "Hoa hồng lên đến cấp 10",
+          "Tự động nâng cấp khi đáp ứng điều kiện"
+        ]
+      }
+    },
+    "transparency": {
+      "title": "🔍 Minh bạch tuyệt đối",
+      "features": [
+        "Đăng ký trên blockchain công khai",
+        "Ví có thể kiểm toán",
+        "Bảng điều khiển lợi nhuận thời gian thực",
+        "DAO đang được phát triển"
+      ]
+    },
+    "cta": {
+      "title": "Bạn không tham gia để duy trì hệ thống. Bạn tham gia để hưởng lợi từ lợi nhuận đã được tạo ra.",
+      "subtitle": "HOOMOON mang lại điều mà thị trường chưa từng làm được: Lợi nhuận thực. Kiểm soát minh bạch. Phân phối dựa trên một quỹ đã tăng giá hàng triệu.",
+      "button": "Hãy là một trong những người đầu tiên truy cập quỹ"
+    },
+    "footer": {
+      "links": {
+        "website": "www.hoomoon.ai",
+        "terms": "Điều khoản sử dụng",
+        "privacy": "Chính sách quyền riêng tư"
+      },
+      "location": "Trụ sở chính: Dubai | Ra mắt tháng 1 năm 2025",
+      "copyright": "Bảo lưu mọi quyền."
+    },
+    "dynamicValues": {
+      "math": {
+        "holds": "630 triệu APTM",
+        "appreciation": "= 6,3 triệu USD",
+        "current": "88,2 triệu USD"
+      },
+      "mexc": {
+        "visits": "+6 triệu",
+        "volume": "2,5 tỷ USD"
+      }
+    }
+  },
+  "ko": {
+    "platformMessage": "이 플랫폼은 공식 Hoomoon 환경입니다.",
+    "login": "로그인",
+    "hero": {
+      "tag": "암호화폐 투자 펀드",
+      "title": "우리리는 화폐를 만든 것이 아닙니다. 우리는 그것의 가치 상승으로 가는 직행로를 만들었습니다.",
+      "subtitle": "암호화폐 가치 분배의 다음 혁명에 조기 접근하세요.",
+      "getStarted": "시작하기",
+      "viewPlans": "플랜 보기",
+      "fundInfo": "HOOMOON은 APTM 6억 3천만 개(전체 공급량의 30%)를 보유하고 있습니다.",
+      "techInfo": "기술로 구동되고, 사실로 뒷받침됩니다.",
+      "scrollText": "아래로 스크롤하여 확인"
+    },
+    "stats": {
+      "title": "왜 APTM을 신뢰해야 할까요?",
+      "description": "APTM(Apertum)은 EVM 호환 Layer 1 블록체인으로, 확장 가능하고 수수료가 매우 저렴합니다. 최근 세계 10대 거래소 중 하나인 MEXC에 상장되었습니다.",
+      "uniqueWallets": "고유 지갑 수",
+      "dailyTransactions": "일일 거래 수",
+      "dailyVolume": "일일 거래량",
+      "activePools": "활성 DEX 풀",
+      "baseTechnology": "기반 기술",
+      "mexcTitle": "MEXC:",
+      "mexcStats": {
+        "rank": "세계 7위",
+        "visits": "주간 방문자 수 600만+",
+        "volume": "일일 거래량 25억 달러"
+      },
+      "institutional": "HOOMOON은 APTM의 주요 기관 보유자 중 하나입니다."
+    },
+    "math": {
+      "title": "HOOMOON의 수학",
+      "description": "APTM이 0.01달러 오를 때마다 HOOMOON은 630만 달러의 수익을 얻습니다. 현재 가격이 1.14달러일 때, 펀드는 이미 8,820만 달러의 수익을 창출했습니다 — 단 한 개의 토큰도 판매하지 않고.",
+      "calculation": "간단한 계산:",
+      "items": {
+        "holds": "HOOMOON은 APTM 6억 3천만 개 보유",
+        "appreciation": "0.01달러 상승당 수익 = 630만 달러",
+        "current": "현재 누적 수익: 8,820만 달러"
+      },
+      "future": {
+        "title": "가격이 5달러에 도달한다면?",
+        "description": "HOOMOON 펀드의 가치는 31억 5천만 달러를 초과하며, 누적 수익은 25억 달러를 넘습니다."
+      }
+    },
+    "roadmap": {
+      "title": "가치 상승 로드맵 — 이미 진행 중",
+      "months": ["1월", "2월", "3월", "4월", "5월"],
+      "status": {
+        "complete": "완료됨",
+        "current": "현재",
+        "future": "예정"
+      },
+      "currentStatus": "우리는 여기 있습니다",
+      "finalProfit": "HOOMOON 펀드 누적 수익: 8,820만 달러"
+    },
+    "captation": {
+      "title": "왜 1,000만 달러만 모금할까요?",
+      "subtitle": "유동성은 이미 확보됨\n수익은 이미 창출됨\n모금은 확장, 구조화, 전략적 가치 상승을 위한 것일 뿐",
+      "example": "예시:",
+      "items": {
+        "fundraising": "모금액: 1,000만 달러",
+        "plan": "CALLISTO 플랜: 40일 동안 160% 수익",
+        "needed": "전체 지급에 필요한 금액: 600만 달러"
+      },
+      "conclusion": {
+        "title": "펀드 내 수익 8,820만 달러로:",
+        "items": [
+          "HOOMOON은 14개 이상의 CALLISTO 사이클을 완전하게 지급할 수 있음",
+          "신규 유입 없이도 가능"
+        ]
+      }
+    },
+    "plans": {
+      "title": "🌙 HOOMOON 플랜 | 당신의 MOON을 선택하세요",
+      "description": "어떻게 작동하나요?\nMOON을 선택하세요\nPix, 암호화폐 또는 내부 잔액으로 활성화\n일일 자동 수익 지급\n출금은 월~금 24시간 후 가능",
+      "free": {
+        "title": "🆓 HOO FREE",
+        "features": [
+          "무료 접근",
+          "추천하고 수익 받기",
+          "투자 불필요"
+        ],
+        "button": "무료 시작"
+      },
+      "pandora": {
+        "title": "🌙 HOO PANDORA",
+        "features": [
+          "60일 동안 5달러",
+          "120% 수익 (하루 2.00%)",
+          "매일 출금 가능"
+        ],
+        "button": "지금 투자하기"
+      },
+      "titan": {
+        "title": "💠 HOO TITAN",
+        "features": [
+          "40일 동안 10달러",
+          "140% 수익 (하루 3.25%)",
+          "3일마다 출금 가능"
+        ],
+        "button": "지금 투자하기"
+      },
+      "callisto": {
+        "title": "🪐 HOO CALLISTO",
+        "features": [
+          "40일 동안 20달러",
+          "160% 수익 (하루 4.57%)",
+          "10일마다 출금 가능"
+        ],
+        "button": "지금 투자하기",
+        "popular": "인기"
+      }
+    },
+    "rewards": {
+      "title": "🧠 추천 보상 프로그램",
+      "silver": {
+        "title": "🥈 HOO SILVER",
+        "features": [
+          "모든 활성화 시 자동 참여",
+          "직접 커미션: 10%",
+          "팀 수익 50달러 달성 시 2~3단계 개방"
+        ]
+      },
+      "gold": {
+        "title": "🥇 HOO GOLD",
+        "features": [
+          "누적 수익 250달러로 1~4단계 개방"
+        ]
+      },
+      "black": {
+        "title": "🖤 HOO BLACK",
+        "features": [
+          "최대 10단계까지 커미션 수령 가능",
+          "조건 충족 시 자동 승급"
+        ]
+      }
+    },
+    "transparency": {
+      "title": "🔍 완전한 투명성",
+      "features": [
+        "공개 블록체인 등록",
+        "감사 가능한 지갑",
+        "실시간 수익 패널",
+        "개발 중인 DAO 거버넌스"
+      ]
+    },
+    "cta": {
+      "title": "당신은 시스템을 유지하기 위해 가입하는 것이 아닙니다. 이미 발생한 수익을 누리기 위해 가입하는 것입니다.",
+      "subtitle": "HOOMOON은 시장이 결코 제공하지 못한 것을 제공합니다: 실질적인 수익성. 투명한 제어. 이미 가치가 상승한 펀드를 기반으로 한 분배.",
+      "button": "펀드에 가장 먼저 접근하세요"
+    },
+    "footer": {
+      "links": {
+        "website": "www.hoomoon.ai",
+        "terms": "이용 약관",
+        "privacy": "개인정보 보호정책"
+      },
+      "location": "본사: 두바이 | 2025년 1월 출시",
+      "copyright": "모든 권리 보유."
+    },
+    "dynamicValues": {
+      "math": {
+        "holds": "6억 3천만 APTM",
+        "appreciation": "= 630만 달러",
+        "current": "8,820만 달러"
+      },
+      "mexc": {
+        "visits": "600만+",
+        "volume": "25억 달러"
+      }
+    }
   }
+
+
 
 
 }
@@ -712,7 +1056,9 @@ function LanguageSelector({ currentLang }: { currentLang: string }) {
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'pt-BR', name: 'Português', flag: '🇧🇷' },
     { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' }
+    { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: 'vn', name: 'Việt Nam', flag: '🇻🇳' },
+    { code: 'ko', name: '한국어', flag: '🇰🇷' }
   ]
   
   const currentLanguage = languages.find(lang => lang.code === currentLang)
