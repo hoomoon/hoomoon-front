@@ -29,7 +29,7 @@ export async function generateStaticParams() {
     { lang: 'pt-BR' },
     { lang: 'es' },
     { lang: 'fr' },
-    { lang: 'vn' },
+    { lang: 'vi' },
     { lang: 'ko' },
     { lang: 'ru' },
     { lang: 'hi' },

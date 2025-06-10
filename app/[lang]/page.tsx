@@ -695,7 +695,7 @@ const translations = {
       }
     }
   },
-  "vn": {
+  "vi": {
     "platformMessage": "Nền tảng này là môi trường chính thức của Hoomoon.",
     "login": "Đăng nhập",
     "hero": {
@@ -1743,7 +1743,7 @@ function LanguageSelector({ currentLang }: { currentLang: string }) {
     { code: 'hi', name: 'हिंदी', flag: '🇮🇳' },
     { code: 'it', name: 'Italiano', flag: '🇮🇹' },
     { code: 'ko', name: '한국어', flag: '🇰🇷' },
-    { code: 'vn', name: 'Tiếng Việt', flag: '🇻🇳' },
+    { code: 'vi', name: 'Tiếng Việt', flag: '🇻i' },
   ]
   
   const currentLanguage = languages.find(lang => lang.code === currentLang)
